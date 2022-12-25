@@ -1,6 +1,5 @@
 package com.github.grooviter.stateit
 
-
 import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.files.DirectoryResource
 import groovy.json.JsonOutput

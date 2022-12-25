@@ -5,15 +5,15 @@ import com.github.grooviter.stateit.core.Result
 import groovy.transform.TupleConstructor
 
 
-import static com.github.grooviter.stateit.files.DirectoryResourceErrors.ERROR_PATH_MISSING
-import static com.github.grooviter.stateit.files.DirectoryResourceErrors.ERROR_UNDEFINED
+import static DirectoryResourceErrors.ERROR_PATH_MISSING
+import static DirectoryResourceErrors.ERROR_UNDEFINED
 
 @TupleConstructor(includes = ["id", "directory"])
 class DirectoryResource extends Resource {
     String id
     DirectoryProps directory
 
-    static final String TYPE = this.class.name
+    static final String TYPE = DirectoryResource.name
 
     @Override
     Result<Resource> create() {
