@@ -1,16 +1,18 @@
 package com.github.grooviter.stateit.files
 
 import com.github.grooviter.stateit.core.Result
+import com.github.grooviter.stateit.files.mkdir.MkdirProps
+import com.github.grooviter.stateit.files.mkdir.MkdirResource
 import spock.lang.Specification
 
 class DirectoryResourceSpec extends Specification {
     void 'creating a directory resource without path should fail'() {
         given:
-        DirectoryProps directory = new DirectoryProps()
-        DirectoryResource directoryResource = new DirectoryResource("id", directory)
+        MkdirProps directory = new MkdirProps()
+        MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<DirectoryResource> result = directoryResource.create()
+        Result<MkdirResource> result = directoryResource.create()
 
         then:
         result.isFailure()
@@ -22,11 +24,11 @@ class DirectoryResourceSpec extends Specification {
     void 'creating a directory resource changes its state to created'() {
         given:
         File directoryPath = new File("/tmp/kk1")
-        DirectoryProps directory = new DirectoryProps(directoryPath.absolutePath)
-        DirectoryResource directoryResource = new DirectoryResource("id", directory)
+        MkdirProps directory = new MkdirProps(directoryPath.absolutePath)
+        MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<DirectoryResource> result = directoryResource.create()
+        Result<MkdirResource> result = directoryResource.create()
 
         then:
         result.isSuccess()
@@ -38,11 +40,11 @@ class DirectoryResourceSpec extends Specification {
     void 'creating a directory resource creates a directory'() {
         given:
         File directoryPath = new File("/tmp/kk2")
-        DirectoryProps directory = new DirectoryProps(directoryPath.absolutePath)
-        DirectoryResource directoryResource = new DirectoryResource("id", directory)
+        MkdirProps directory = new MkdirProps(directoryPath.absolutePath)
+        MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<DirectoryResource> result = directoryResource.create()
+        Result<MkdirResource> result = directoryResource.create()
 
         then:
         result.isSuccess()
@@ -57,11 +59,11 @@ class DirectoryResourceSpec extends Specification {
 
     void 'creating a directory in wrong place should not fulfill created'() {
         File directoryPath = new File("/kk")
-        DirectoryProps directory = new DirectoryProps(directoryPath.absolutePath)
-        DirectoryResource directoryResource = new DirectoryResource("id", directory)
+        MkdirProps directory = new MkdirProps(directoryPath.absolutePath)
+        MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<DirectoryResource> result = directoryResource.create()
+        Result<MkdirResource> result = directoryResource.create()
 
         then:
         result.isFailure()

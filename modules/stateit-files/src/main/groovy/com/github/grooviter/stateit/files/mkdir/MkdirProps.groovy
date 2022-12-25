@@ -1,8 +1,8 @@
-package com.github.grooviter.stateit.files
+package com.github.grooviter.stateit.files.mkdir
 
 import groovy.transform.TupleConstructor
 
 @TupleConstructor
-class DirectoryProps {
+class MkdirProps {
     String path
 }

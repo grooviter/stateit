@@ -1,7 +1,7 @@
 package com.github.grooviter.stateit
 
 import com.github.grooviter.stateit.core.Plan
-import com.github.grooviter.stateit.files.DirectoryResource
+import com.github.grooviter.stateit.files.mkdir.MkdirResource
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
@@ -9,7 +9,7 @@ class DSLSpec extends Specification {
     void 'declaring one resource successfully'() {
         when:
         Plan plan = DSL.stateit {
-            directory("backup-directory") {
+            mkdir("backup-directory") {
                 path = "/tmp/backup"
             }
         }
@@ -21,11 +21,11 @@ class DSLSpec extends Specification {
     void 'declaring more than one resources successfully'() {
         when:
         Plan plan = DSL.stateit {
-            directory("one-directory") {
+            mkdir("one-directory") {
                 path = "/tmp/one"
             }
 
-            directory("two-directory") {
+            mkdir("two-directory") {
                 path = "/tmp/two"
             }
         }
@@ -42,14 +42,14 @@ class DSLSpec extends Specification {
         stateFile.text = JsonOutput.toJson([
             [
                 id: "applied-id",
-                type: DirectoryResource.TYPE,
+                type: MkdirResource.TYPE,
                 directory: [
                     path: "/tmp/my-dir"
                 ]
             ],
             [
                 id: "resource-to-remove",
-                type: DirectoryResource.TYPE,
+                type: MkdirResource.TYPE,
                 directory: [
                     path: "/tmp/to-remove"
                 ]
@@ -58,11 +58,11 @@ class DSLSpec extends Specification {
 
         when:
         Plan plan = DSL.stateit {
-            directory("applied-id") {
+            mkdir("applied-id") {
                 path = myDir.absolutePath
             }
 
-            directory("to-apply-id") {
+            mkdir("to-apply-id") {
                 path = "another"
             }
 
