@@ -7,6 +7,10 @@ dependencies {
     api "org.apache.groovy:groovy:$groovy"
     api "org.apache.groovy:groovy-json:$groovy"
     implementation "org.kohsuke:github-api:1.313"
+    implementation "org.slf4j:slf4j-api:$slf4j"
+    implementation "ch.qos.logback:logback-core:$logback"
+    implementation "ch.qos.logback:logback-classic:$logback"
+
     testImplementation "org.spockframework:spock-core:2.4-M1-groovy-4.0"
 
 }
