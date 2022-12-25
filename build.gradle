@@ -1,0 +1,172 @@
+plugins {
+  id 'org.kordamp.gradle.groovy-project'
+  id 'org.kordamp.gradle.codenarc'
+  id 'org.jreleaser' version '1.3.1'
+}
+
+config {
+  release = !version.endsWith('SNAPSHOT')
+
+  info {
+    name        = 'stateit'
+    vendor      = 'Grooviter'
+    description = 'Stateit provides a DSL to generate infrastructure resources'
+
+    links {
+      website      = 'http://grooviter.github.io/stateit/'
+      issueTracker = 'https://github.com/grooviter/stateit/issues'
+      scm          = 'https://github.com/grooviter/stateit.git'
+    }
+    people {
+      person {
+        id = 'mariogarcia'
+        name = 'Mario Garcia'
+        roles = ['developer']
+      }
+    }
+    repositories {
+      repository {
+        name = 'releases'
+        url  = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+        credentials {
+          username = findProperty("PUBLISH_REPO_USERNAME")
+          password = findProperty("PUBLISH_REPO_PASSWORD")
+        }
+      }
+      repository {
+        name = 'snapshots'
+        url  = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+        credentials {
+          username = findProperty("PUBLISH_REPO_USERNAME")
+          password = findProperty("PUBLISH_REPO_PASSWORD")
+        }
+      }
+    }
+  }
+  artifacts {
+    minpom {
+      enabled
+    }
+  }
+  publishing {
+    releasesRepository  = "releases"
+    snapshotsRepository = "snapshots"
+    signing {
+      enabled   = !version.endsWith("SNAPSHOT")
+      keyId     = findProperty("PUBLISH_SIGN_KEY_ID")
+      secretKey = findProperty("PUBLISH_SIGN_KEY")
+      password  = findProperty("PUBLISH_SIGN_SECRET")
+    }
+    pom {
+      overwriteInceptionYear = "2022"
+    }
+  }
+  docs {
+    guide {
+      publish {
+        enabled = true
+      }
+    }
+    sourceHtml {
+      enabled = false
+      aggregate {
+        enabled = false
+      }
+    }
+    groovydoc {
+      excludes       = ["META-INF"]
+      replaceJavadoc = true
+      options {
+        docTitle    = "Stateit"
+        windowTitle =  "StateIt: Groovy Infrastructure library"
+        link 'https://docs.oracle.com/javase/11/docs/api/', 'java'
+        link 'http://docs.groovy-lang.org/latest/html/api/', 'groovy', 'org.codehaus.groovy'
+      }
+      aggregate {
+        enabled        = true
+        replaceJavadoc = true
+      }
+    }
+    javadoc {
+      autoLinks {
+        useJavadocIo = true
+      }
+    }
+  }
+  licensing {
+    enabled = false
+    licenses {
+      license {
+        id = 'Apache-2.0'
+        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+      }
+    }
+  }
+  quality {
+    /* #TODO I'm unable to tell kordamp to exclude *Spec */
+    codenarc {
+      ignoreFailures         = true // #TODO not working on kordamp 47.0
+      maxPriority1Violations = 0
+      maxPriority2Violations = 0
+      maxPriority3Violations = 260
+    }
+  }
+  coverage {
+    jacoco {
+      enabled = true
+    }
+  }
+}
+
+jreleaser {
+  release {
+    github {
+      token     = findProperty('PUBLISH_GH_TOKEN')
+      overwrite = true
+      changelog {
+        formatted = 'ALWAYS'
+        preset    = 'conventional-commits'
+        hide {
+          uncategorized = true
+        }
+      }
+      prerelease {
+        enabled = version.endsWith("SNAPSHOT")
+      }
+    }
+  }
+  signing {
+    active = 'NEVER'
+  }
+  deploy {
+    maven { active = 'NEVER' }
+  }
+}
+
+allprojects {
+  repositories {
+    mavenCentral()
+  }
+}
+
+subprojects {
+  pluginManager.withPlugin("java", {
+    test {
+      useJUnitPlatform()
+    }
+    compileJava {
+      sourceCompatibility = "1.8"
+      targetCompatibility = "1.8"
+    }
+    compileGroovy {
+      groovyOptions.configurationScript = file("$rootDir/config/groovy/compiler.groovy")
+    }
+  })
+}
+
+task release() {
+  dependsOn(version.endsWith('SNAPSHOT')
+    ? [':gql-core:publishAllPublicationsToSnapshotsRepository', ':gql-ratpack:publishAllPublicationsToSnapshotsRepository', 'jreleaserRelease']
+    : [':gql-core:publish', 'gql-ratpack:publish', ':guide:gitPublishPush', 'jreleaserFullRelease'])
+}
+
