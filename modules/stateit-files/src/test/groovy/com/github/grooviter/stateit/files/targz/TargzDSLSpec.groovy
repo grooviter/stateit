@@ -5,12 +5,14 @@ import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.core.Result
 import com.github.grooviter.stateit.test.BaseSpecification
 
-class DSLSpec extends BaseSpecification {
+class TargzDSLSpec extends BaseSpecification {
     void 'create a tar.gz from a directory successfully'() {
         given:
         File uncompressed = mkdir("/tmp/test-dir")
-        createTextFilesInDir(uncompressed, [hello: "hi!", bye: "bye"])
         File compressed = file("/tmp/test-dir.tar.gz")
+
+        and:
+        createTextFilesInDir(uncompressed, [hello: "hi!", bye: "bye"])
 
         and:
         Plan plan = DSL.stateit {
@@ -51,5 +53,9 @@ class DSLSpec extends BaseSpecification {
 
         then:
         planExecutionResult.isSuccess()
+
+        cleanup:
+        deleteDirs(uncompressed)
+        deleteFiles(compressed)
     }
 }

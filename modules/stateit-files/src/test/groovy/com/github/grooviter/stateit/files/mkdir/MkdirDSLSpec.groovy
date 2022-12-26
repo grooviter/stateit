@@ -8,7 +8,7 @@ import com.github.grooviter.stateit.files.mkdir.MkdirResource
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
-class DSLSpec extends Specification {
+class MkdirDSLSpec extends Specification {
     void 'declaring one resource successfully'() {
         when:
         Plan plan = DSL.stateit {
