@@ -8,26 +8,48 @@ import com.github.grooviter.stateit.test.BaseSpecification
 class DSLSpec extends BaseSpecification {
     void 'create a tar.gz from a directory successfully'() {
         given:
-        File testDir = mkdir("/tmp/test-dir")
-        File gzipFile = file("/tmp/test-dir.tar.gz")
+        File uncompressed = mkdir("/tmp/test-dir")
+        createTextFilesInDir(uncompressed, [hello: "hi!", bye: "bye"])
+        File compressed = file("/tmp/test-dir.tar.gz")
 
+        and:
         Plan plan = DSL.stateit {
             targz("test-dir-gzip") {
-                input  = testDir.absolutePath
-                output = gzipFile.absolutePath
+                input  = uncompressed.absolutePath
+                output = compressed.absolutePath
                 action = compress()
             }
         }
 
         when:
-        createTextFiles(testDir, [hello: "hi!", bye: "bye"])
         Result<Plan> planExecutionResult = executePlan(plan)
 
         then:
         planExecutionResult.isSuccess()
 
         cleanup:
-        deleteDirs(testDir)
-        deleteFiles(gzipFile)
+        deleteDirs(uncompressed)
+        deleteFiles(compressed)
+    }
+
+    void 'decompress a tar.gz successfully'() {
+        given:
+        File compressed = createTarGzFile("/tmp/compressed.tar.gz")
+        File uncompressed = file("/tmp/uncompressed")
+
+        and:
+        Plan plan = DSL.stateit {
+            targz("test-dir-gzip") {
+                input  = compressed.absolutePath
+                output = uncompressed.absolutePath
+                action = extract()
+            }
+        }
+
+        when:
+        Result<Plan> planExecutionResult = executePlan(plan)
+
+        then:
+        planExecutionResult.isSuccess()
     }
 }
