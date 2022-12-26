@@ -1,11 +1,11 @@
-package com.github.grooviter.stateit.files
+package com.github.grooviter.stateit.files.mkdir
 
 import com.github.grooviter.stateit.core.Result
 import com.github.grooviter.stateit.files.mkdir.MkdirProps
 import com.github.grooviter.stateit.files.mkdir.MkdirResource
 import spock.lang.Specification
 
-class DirectoryResourceSpec extends Specification {
+class MkdirResourceSpec extends Specification {
     void 'creating a directory resource without path should fail'() {
         given:
         MkdirProps directory = new MkdirProps()

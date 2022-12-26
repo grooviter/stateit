@@ -1,8 +1,8 @@
 package com.github.grooviter.stateit.files
 
 import com.github.grooviter.stateit.DSL
-import com.github.grooviter.stateit.files.gzip.GzipProps
-import com.github.grooviter.stateit.files.gzip.GzipResource
+import com.github.grooviter.stateit.files.targz.TargzProps
+import com.github.grooviter.stateit.files.targz.TargzResource
 import com.github.grooviter.stateit.files.mkdir.MkdirProps
 import com.github.grooviter.stateit.files.mkdir.MkdirResource
 
@@ -14,10 +14,14 @@ class FilesExtensionModule {
         return dsl
     }
 
-    static DSL gzip(DSL dsl, String id, @DelegatesTo(GzipProps) Closure closure) {
-        GzipProps gzipProps = new GzipProps()
-        gzipProps.with(closure.clone() as Closure<GzipProps>)
-        dsl.addDeclaredResource(new GzipResource())
+    static DSL targz(DSL dsl, String id, @DelegatesTo(TargzProps) Closure closure) {
+        TargzProps gzipProps = new TargzProps()
+        gzipProps.with(closure.clone() as Closure<TargzProps>)
+        dsl.addDeclaredResource(TargzResource.builder()
+                .id(id)
+                .input(gzipProps.input)
+                .output(gzipProps.output)
+                .type(gzipProps.action).build())
         return dsl
     }
 }

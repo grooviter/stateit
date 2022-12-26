@@ -2,18 +2,17 @@ package com.github.grooviter.stateit.files.mkdir
 
 import com.github.grooviter.stateit.core.Resource
 import com.github.grooviter.stateit.core.Result
+import groovy.transform.Canonical
 import groovy.transform.TupleConstructor
 
+import static MkdirErrors.ERROR_PATH_MISSING
+import static MkdirErrors.ERROR_UNDEFINED
 
-import static MkdirResourceErrors.ERROR_PATH_MISSING
-import static MkdirResourceErrors.ERROR_UNDEFINED
-
+@Canonical(includes=["id"])
 @TupleConstructor(includes = ["id", "directory"])
 class MkdirResource extends Resource {
     String id
     MkdirProps directory
-
-    static final String TYPE = MkdirResource.name
 
     @Override
     Result<Resource> create() {

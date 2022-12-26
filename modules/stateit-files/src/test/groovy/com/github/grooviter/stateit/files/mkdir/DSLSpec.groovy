@@ -1,6 +1,9 @@
-package com.github.grooviter.stateit
+package com.github.grooviter.stateit.files.mkdir
 
+import com.github.grooviter.stateit.DSL
 import com.github.grooviter.stateit.core.Plan
+import com.github.grooviter.stateit.core.PlanExecutor
+import com.github.grooviter.stateit.core.Result
 import com.github.grooviter.stateit.files.mkdir.MkdirResource
 import groovy.json.JsonOutput
 import spock.lang.Specification
@@ -42,14 +45,14 @@ class DSLSpec extends Specification {
         stateFile.text = JsonOutput.toJson([
             [
                 id: "applied-id",
-                type: MkdirResource.TYPE,
+                type: MkdirResource.name,
                 directory: [
                     path: "/tmp/my-dir"
                 ]
             ],
             [
                 id: "resource-to-remove",
-                type: MkdirResource.TYPE,
+                type: MkdirResource.name,
                 directory: [
                     path: "/tmp/to-remove"
                 ]

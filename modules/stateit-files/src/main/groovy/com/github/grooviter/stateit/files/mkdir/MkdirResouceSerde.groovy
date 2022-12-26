@@ -11,4 +11,9 @@ class MkdirResouceSerde implements ResourceSerde<MkdirResource> {
         String path = rawValues.directory.path.toString()
         return new MkdirResource(id, new MkdirProps(path))
     }
+
+    @Override
+    String getType() {
+        return MkdirResource.name
+    }
 }

@@ -11,6 +11,8 @@ dependencies {
     api "org.apache.groovy:groovy:$groovy"
     api "org.apache.groovy:groovy-json:$groovy"
     api project(":stateit-core")
+    implementation 'org.apache.commons:commons-compress:1.22'
+
 
     groovydocs "org.apache.groovy:groovy-all:$groovy"
     testImplementation "org.spockframework:spock-core:2.4-M1-groovy-4.0"
