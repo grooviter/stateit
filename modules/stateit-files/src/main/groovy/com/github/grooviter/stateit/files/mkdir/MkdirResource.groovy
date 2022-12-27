@@ -28,6 +28,12 @@ class MkdirResource extends Resource {
 
     @Override
     Result<Resource> applyWhenDestroying() {
+        boolean successful = new File(props.path).deleteDir()
+
+        if (!successful) {
+            return ERROR_UNDEFINED.toResult(this) as Result<Resource>
+        }
+
         return Result.of(this) as Result<Resource>
     }
 

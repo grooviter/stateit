@@ -5,10 +5,10 @@ import groovy.transform.CompileDynamic
 
 class MkdirResourceSerde implements ResourceSerde<MkdirResource> {
     @Override
-    @CompileDynamic
     MkdirResource fromMap(Map<String, ?> rawValues) {
-        String id = rawValues.id?.toString()
-        String path = rawValues.directory.path.toString()
+        Map props = rawValues.props as Map
+        String id = rawValues?.id?.toString()
+        String path = props?.path?.toString()
         return new MkdirResource(id, new MkdirProps(path))
     }
 
