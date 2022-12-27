@@ -3,12 +3,12 @@ package com.github.grooviter.stateit.files
 import com.github.grooviter.stateit.core.Provider
 import com.github.grooviter.stateit.core.ResourceSerde
 import com.github.grooviter.stateit.files.targz.TargzResourceSerde
-import com.github.grooviter.stateit.files.mkdir.MkdirResouceSerde
+import com.github.grooviter.stateit.files.mkdir.MkdirResourceSerde
 
 class FilesProvider implements Provider {
     Map<String, ResourceSerde<?>> SERDES =  [
-        new MkdirResouceSerde(),
-        new TargzResourceSerde()
+            new MkdirResourceSerde(),
+            new TargzResourceSerde()
     ].collectEntries { process it }
 
     @Override

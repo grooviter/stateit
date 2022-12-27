@@ -3,7 +3,7 @@ package com.github.grooviter.stateit.files.mkdir
 import com.github.grooviter.stateit.core.ResourceSerde
 import groovy.transform.CompileDynamic
 
-class MkdirResouceSerde implements ResourceSerde<MkdirResource> {
+class MkdirResourceSerde implements ResourceSerde<MkdirResource> {
     @Override
     @CompileDynamic
     MkdirResource fromMap(Map<String, ?> rawValues) {
