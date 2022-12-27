@@ -1,3 +1,7 @@
+state = {
+  path = "/tmp/mystate.json"
+}
+
 mkdir("create-temporal-dir-1") {
   path = "/tmp/randomdirectory-3"
 }
