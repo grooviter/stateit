@@ -1,28 +1,23 @@
 package com.github.grooviter.stateit.files.mkdir
 
+import com.github.grooviter.stateit.core.Dependency
 import com.github.grooviter.stateit.core.Resource
 import com.github.grooviter.stateit.core.Result
-import groovy.transform.Canonical
+import groovy.transform.EqualsAndHashCode
 import groovy.transform.TupleConstructor
 
 import static MkdirErrors.ERROR_PATH_MISSING
 import static MkdirErrors.ERROR_UNDEFINED
 
-@Canonical(includes=["id"])
-@TupleConstructor(includes = ["id", "directory"])
+@TupleConstructor
+@EqualsAndHashCode(includes = ["id"])
 class MkdirResource extends Resource {
     String id
-    MkdirProps directory
+    MkdirProps props
 
     @Override
-    Result<Resource> create() {
-        Result<Resource> validation = validate()
-
-        if (validation.isFailure()) {
-            return validation as Result<Resource>
-        }
-
-        boolean successful = new File(directory.path).mkdirs()
+    Result<Resource> applyWhenCreating() {
+        boolean successful = new File(props.path).mkdirs()
 
         if (!successful) {
             return ERROR_UNDEFINED.toResult(this) as Result<Resource>
@@ -32,15 +27,19 @@ class MkdirResource extends Resource {
     }
 
     @Override
-    Result<Resource> destroy() {
+    Result<Resource> applyWhenDestroying() {
         return Result.of(this) as Result<Resource>
     }
 
     @Override
     Result<Resource> validate() {
-        if (!directory?.path){
+        if (!props?.path){
             return ERROR_PATH_MISSING.toResult(this) as Result<Resource>
         }
         return Result.of(this) as Result<Resource>
+    }
+
+    Dependency getPath() {
+        return new Dependency(this, "path")
     }
 }

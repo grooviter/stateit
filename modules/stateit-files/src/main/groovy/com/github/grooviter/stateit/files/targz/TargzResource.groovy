@@ -2,32 +2,24 @@ package com.github.grooviter.stateit.files.targz
 
 import com.github.grooviter.stateit.core.Resource
 import com.github.grooviter.stateit.core.Result
-import groovy.transform.builder.Builder
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.TupleConstructor
 
-@Builder
+@TupleConstructor
+@EqualsAndHashCode(includes = ["id"])
 class TargzResource extends Resource {
     String id
-    String input
-    String output
-    TargzProps.Action type
+    TargzProps props
 
     @Override
-    Result<Resource> create() {
-        if (!input) {
-            return TargzErrors.INPUT_MISSING.toResult(this) as Result<Resource>
-        }
-
-        if (!output) {
-            return TargzErrors.OUTPUT_MISSING.toResult(this) as Result<Resource>
-        }
-
+    Result<Resource> applyWhenCreating() {
         try {
-            if (TargzProps.Action.COMPRESS == type) {
-                CompressionUtil.compressTargz(this.input, this.output)
+            if (TargzProps.Action.COMPRESS == this.props.action) {
+                CompressionUtil.compressTargz(this.props.input, this.props.output)
             }
 
-            if (TargzProps.Action.EXTRACT == type) {
-                CompressionUtil.decompressTargz(this.input, this.output)
+            if (TargzProps.Action.EXTRACT == this.props.action) {
+                CompressionUtil.decompressTargz(this.props.input, this.props.output)
             }
 
         } catch (IOException ignored) {
@@ -38,12 +30,19 @@ class TargzResource extends Resource {
     }
 
     @Override
-    Result<Resource> destroy() {
+    Result<Resource> applyWhenDestroying() {
         return null
     }
 
     @Override
     Result<Resource> validate() {
-        return null
+        if (!props.input) {
+            return TargzErrors.INPUT_MISSING.toResult(this) as Result<Resource>
+        }
+
+        if (!props.output) {
+            return TargzErrors.OUTPUT_MISSING.toResult(this) as Result<Resource>
+        }
+        return Result.of(this) as Result<Resource>
     }
 }

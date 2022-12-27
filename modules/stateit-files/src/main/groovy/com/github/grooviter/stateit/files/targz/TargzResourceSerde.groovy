@@ -5,12 +5,11 @@ import com.github.grooviter.stateit.core.ResourceSerde
 class TargzResourceSerde implements ResourceSerde<TargzResource> {
     @Override
     TargzResource fromMap(Map<String, ?> rawValues) {
-        return TargzResource.builder()
-            .id(rawValues.id?.toString())
-            .input(rawValues.input?.toString())
-            .output(rawValues.output?.toString())
-            .type(TargzProps.Action.valueOf(rawValues.type?.toString()))
-            .build()
+        TargzProps props = new TargzProps()
+        props.input = rawValues.input?.toString()
+        props.output = rawValues.output?.toString()
+        props.action = TargzProps.Action.valueOf(rawValues.type?.toString())
+        return new TargzResource(rawValues.id?.toString(), props)
     }
 
     @Override

@@ -7,21 +7,19 @@ import com.github.grooviter.stateit.files.mkdir.MkdirProps
 import com.github.grooviter.stateit.files.mkdir.MkdirResource
 
 class FilesExtensionModule {
-    static DSL mkdir(DSL dsl, String id, @DelegatesTo(MkdirProps) Closure closure) {
-        MkdirProps mkdirProps = new MkdirProps()
-        mkdirProps.with(closure.clone() as Closure<MkdirProps>)
-        dsl.addDeclaredResource(new MkdirResource(id, mkdirProps))
-        return dsl
+    static MkdirResource mkdir(DSL dsl, String id, @DelegatesTo(MkdirProps) Closure closure) {
+        MkdirProps props = new MkdirProps()
+        props.with(closure.clone() as Closure<MkdirProps>)
+        MkdirResource resource = new MkdirResource(id, props)
+        dsl.addDeclaredResource(resource)
+        return resource
     }
 
-    static DSL targz(DSL dsl, String id, @DelegatesTo(TargzProps) Closure closure) {
-        TargzProps gzipProps = new TargzProps()
-        gzipProps.with(closure.clone() as Closure<TargzProps>)
-        dsl.addDeclaredResource(TargzResource.builder()
-                .id(id)
-                .input(gzipProps.input)
-                .output(gzipProps.output)
-                .type(gzipProps.action).build())
-        return dsl
+    static TargzResource targz(DSL dsl, String id, @DelegatesTo(TargzProps) Closure closure) {
+        TargzProps props = new TargzProps()
+        props.with(closure.clone() as Closure<TargzProps>)
+        TargzResource resource = new TargzResource(id, props)
+        dsl.addDeclaredResource(resource)
+        return resource
     }
 }

@@ -7,7 +7,9 @@ import spock.lang.Specification
 class TargzResourceSpec extends Specification {
     void 'creating a gzip resource without INPUT path should fail'() {
         when:
-        Result<Resource> result = TargzResource.builder().output("/tmp/gz/output.gz").build().create()
+        TargzProps props = new TargzProps()
+        props.output = "/tmp/output-dir"
+        Result<Resource> result = new TargzResource("id", props).create()
 
         then:
         result.error.code == 'gzip.input.missing'
@@ -18,7 +20,9 @@ class TargzResourceSpec extends Specification {
 
     void 'creating a gzip resource without OUTPUT path should fail'() {
         when:
-        Result<Resource> result = TargzResource.builder().input("/tmp/gz/input").build().create()
+        TargzProps props = new TargzProps()
+        props.input = "/tmp/output-dir"
+        Result<Resource> result = new TargzResource("id", props).create()
 
         then:
         result.error.code == 'gzip.output.missing'
@@ -34,10 +38,10 @@ class TargzResourceSpec extends Specification {
 
         when:
         inputFile.mkdir()
-        Result<Resource> result = TargzResource.builder().input(inputFile.absolutePath)
-                .output(outputFile.absolutePath)
-                .build()
-                .create()
+        TargzProps props = new TargzProps()
+        props.input = inputFile.absolutePath
+        props.output = outputFile.absolutePath
+        Result<Resource> result = new TargzResource("id", props).create()
 
         then:
         result.isSuccess()

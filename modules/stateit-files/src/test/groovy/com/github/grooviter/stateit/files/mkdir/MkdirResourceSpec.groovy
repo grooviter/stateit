@@ -1,8 +1,7 @@
 package com.github.grooviter.stateit.files.mkdir
 
+import com.github.grooviter.stateit.core.Resource
 import com.github.grooviter.stateit.core.Result
-import com.github.grooviter.stateit.files.mkdir.MkdirProps
-import com.github.grooviter.stateit.files.mkdir.MkdirResource
 import spock.lang.Specification
 
 class MkdirResourceSpec extends Specification {
@@ -12,7 +11,7 @@ class MkdirResourceSpec extends Specification {
         MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<MkdirResource> result = directoryResource.create()
+        Result<Resource> result = directoryResource.create()
 
         then:
         result.isFailure()
@@ -28,7 +27,7 @@ class MkdirResourceSpec extends Specification {
         MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<MkdirResource> result = directoryResource.create()
+        Result<Resource> result = directoryResource.create()
 
         then:
         result.isSuccess()
@@ -44,7 +43,7 @@ class MkdirResourceSpec extends Specification {
         MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<MkdirResource> result = directoryResource.create()
+        Result<Resource> result = directoryResource.create()
 
         then:
         result.isSuccess()
@@ -63,7 +62,7 @@ class MkdirResourceSpec extends Specification {
         MkdirResource directoryResource = new MkdirResource("id", directory)
 
         when:
-        Result<MkdirResource> result = directoryResource.create()
+        Result<Resource> result = directoryResource.create()
 
         then:
         result.isFailure()

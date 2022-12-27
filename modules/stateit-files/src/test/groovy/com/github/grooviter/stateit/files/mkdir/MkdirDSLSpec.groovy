@@ -2,9 +2,6 @@ package com.github.grooviter.stateit.files.mkdir
 
 import com.github.grooviter.stateit.DSL
 import com.github.grooviter.stateit.core.Plan
-import com.github.grooviter.stateit.core.PlanExecutor
-import com.github.grooviter.stateit.core.Result
-import com.github.grooviter.stateit.files.mkdir.MkdirResource
 import groovy.json.JsonOutput
 import spock.lang.Specification
 

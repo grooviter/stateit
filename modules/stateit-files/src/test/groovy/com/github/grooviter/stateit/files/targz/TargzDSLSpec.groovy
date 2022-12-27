@@ -58,4 +58,38 @@ class TargzDSLSpec extends BaseSpecification {
         deleteDirs(uncompressed)
         deleteFiles(compressed)
     }
+
+    void 'using dependencies'() {
+        given:
+        File compressed = file("/tmp/test-dir.tar.gz")
+        File uncompressedFile = file("/tmp/ooo")
+        File stateFile = file("/tmp/superstate.json")
+
+        and:
+        Plan plan = DSL.stateit {
+            def uncompressed = mkdir("id-data") {
+                path = uncompressedFile.absolutePath
+            }
+
+            targz("test-dir-gzip") {
+                input  = uncompressed.path
+                output = compressed.absolutePath
+                action = compress()
+            }
+
+            state {
+                path = stateFile.absolutePath
+            }
+        }
+
+        when:
+        Result<Plan> executedPlan = executePlan(plan)
+
+        then:
+        executedPlan.isSuccess()
+
+        cleanup:
+        deleteDirs(uncompressedFile)
+        deleteFiles(stateFile)
+    }
 }

@@ -1,5 +1,6 @@
 package com.github.grooviter.stateit.core
 
+import groovy.json.JsonGenerator
 import groovy.json.JsonOutput
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
@@ -11,12 +12,12 @@ class PlanExecutor {
 
     Result<Plan> execute() {
         return Result.of(plan)
-            .flatMap(PlanExecutor::toApply)
-            .flatMap(PlanExecutor::toRemove)
+            .flatMap(PlanExecutor::create)
+            .flatMap(PlanExecutor::destroy)
             .flatMap(PlanExecutor::serializeState)
     }
 
-    private static Result<Plan> toApply(Plan stage) {
+    private static Result<Plan> create(Plan stage) {
         List<Resource> applied = []
         for (Resource resource : stage.resourcesDeclared) {
             log.info "create ${resource.id}"
@@ -30,11 +31,11 @@ class PlanExecutor {
         return Result.of(resolvePlan(stage, applied, []))
     }
 
-    private static Result<Plan> toRemove(Plan stage) {
+    private static Result<Plan> destroy(Plan stage) {
         List<Resource> removed = []
         for (Resource resource : stage.resourcesToRemove) {
             log.info "destroy ${resource.id}"
-            Result<Resource> result = resource.destroy()
+            Result<Resource> result = resource.applyWhenDestroying()
             if (result.isFailure()) {
                 return Result.error(resolvePlan(stage, [], removed), result.error)
             } else {
@@ -49,9 +50,20 @@ class PlanExecutor {
             return Result.of(stage)
         }
 
+        JsonGenerator generator = new JsonGenerator.Options()
+            .addConverter(Plan) { Plan plan, String key ->
+                return plan.resourcesApplied
+            }
+            .addConverter(Resource) { Resource resource, String key ->
+                return [id: resource.id, props: resource.props]
+            }
+            .addConverter(Dependency) { Dependency dependency, String key ->
+                return [parent: dependency.parent.id, target: dependency.targetField, source: dependency.sourceField]
+            }.build()
+
         log.info "save state"
         File stateFile = new File(stage.statePath)
-        stateFile.text = JsonOutput.toJson(stage)
+        stateFile.text = generator.toJson(stage)
         return Result.of(stage)
     }
 

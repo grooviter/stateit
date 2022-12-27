@@ -71,11 +71,11 @@ class PlanExecutorSpec extends Specification {
 
         Plan plan = DSL.stateit {
             mkdir("treasure") {
-                path = yesAllowed
+                path = yesAllowed.absolutePath
             }
 
             mkdir("garbage") {
-                path = notAllowed
+                path = notAllowed.absolutePath
             }
         }
 
@@ -104,7 +104,7 @@ class PlanExecutorSpec extends Specification {
 
         Plan plan = DSL.stateit {
             mkdir("treasure") {
-                path = yesAllowed
+                path = yesAllowed.absolutePath
             }
 
             state {
