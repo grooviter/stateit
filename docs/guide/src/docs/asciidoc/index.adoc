@@ -1,0 +1,20 @@
+= StateIT
+:revnumber: {version}
+:numbered:
+:imagesDir: images/
+:baseDir: ../../../../../modules
+:baseDirForChapters: ../../../../../../modules
+:stem:
+
+[quote]
+Stateit is a library created to make it easier execute tasks that require to keep state
+
+include::{includeDir}/chapter/intro.adoc[]
+
+include::{includeDir}/chapter/concepts.adoc[]
+
+include::{includeDir}/chapter/execution.adoc[]
+
+include::{includeDir}/chapter/design.adoc[]
+
+include::{includeDir}/chapter/providers.adoc[]

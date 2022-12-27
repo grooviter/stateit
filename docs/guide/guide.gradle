@@ -1,0 +1,25 @@
+plugins {
+    id 'org.kordamp.gradle.guide'
+}
+
+asciidoctor {
+    sourceDir 'src/docs/asciidoc'
+
+    sources {
+        include 'index.adoc'
+    }
+
+    attributes  'endpoint-url'       : 'http://github.com/grooviter/stateit',
+            'source-highlighter' : 'coderay',
+            'version'            : version,
+            'imagesdir'          : './images',
+            'toc'                : 'left',
+            'icons'              : 'font',
+            'toclevels'          : 3
+}
+
+asciidoctorj {
+    modules {
+        diagram.version '2.1.0'
+    }
+}
