@@ -14,7 +14,7 @@ def plan = stateit {
    }
 
    state {
-      implementation = file("/tmp/example-state.json")
+      path = "/tmp/example-state.json"
    }
 }
 

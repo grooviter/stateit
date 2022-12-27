@@ -1,14 +1,147 @@
 == Providers
 
-TODO
+A provider represents a set of stateful resources and some stateful operations of a specific realm.
 
 === Files
 
-TODO
+The **Files** provider has a set of resources representing local filesystem items and stateful operations.
+
+==== State
+
+The **Files** provider provides a way of handling a plan state via a local file.
+
+[source, groovy]
+----
+stateit {
+    state {
+        implementation = file('/tmp/mystate.json')
+    }
+}
+----
+
+==== Resources
+===== directory
+
+Represents a file system directory
+
+[source, groovy]
+.directory
+```groovy
+directory('id-directory') {
+  path = '/tmp/directory-to-create'
+}
+```
+
+[cols="1,1,1"]
+.directory
+|===
+| Property | Description | Default value
+
+|path
+|path to create the directory at
+|
+
+|===
+
+===== targz
+
+Represents a periodic tar.gz operation. It uses a cron expression to schedule the operation. It could be a compress or uncompress operation.
+
+NOTE: Cron scheduling only works in *nix systems with crontab, otherwise it will only execute once
+
+[source, groovy]
+.targz
+```groovy
+targz('id-directory') {
+  input     = "/input/dir"
+  output    = () -> "/anotherdir/output${now('yyyy-MM-dd')}.tar.gz"
+  cron      = "*/5 * * * *"
+  action    = compress()
+  overwrite = true
+}
+```
+
+[cols="1,1,1"]
+.targz
+|===
+| Property | Description | Default value
+
+|input
+|directory to compress/uncompress
+|
+
+|output (string)
+|tar.gz file to create (static)
+|
+
+|output (lambda expr)
+|tar.gz file to create (dynamic)
+|
+
+|cron
+|cron expression
+|* * * * *
+
+|action
+| compress() / uncompress()
+|compress()
+
+|overwrite
+|whether to overwrite the file in case it has the same name
+|false
+|===
 
 === Github
 
-TODO
+Provides resources that can be created in Github such as repository, security restrictions, branches...etc.
+
+==== Github credentials
+
+[source,shell]
+.credentials using environment variables
+----
+export STATEIT_GITHUB_USERNAME="username"
+export STATEIT_GITHUB_TOKEN="token"
+----
+
+[source, groovy]
+.credentials using variables block
+```groovy
+variables {
+  github_user  = ""
+  github_token = ""
+}
+
+github_repository('id-directory') {
+  ...
+}
+```
+==== State
+
+[source, groovy]
+----
+stateit {
+   state {
+      implementation = github {
+         repository = "myorg/myrepository"
+         file       = "mystate.json"
+         branch     = "main"
+      }
+   }
+}
+----
+
+==== Resources
+===== repository
+
+[source, groovy]
+.repository
+```groovy
+github_repository('id-directory') {
+  name  = "mycustomrepository"
+  owner = "myorganization"
+}
+```
 
 === Create your own
 

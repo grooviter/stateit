@@ -1,4 +1,4 @@
-package com.github.grooviter.stateit.files.mkdir
+package com.github.grooviter.stateit.files.directory
 
 import com.github.grooviter.stateit.core.Dependency
 import com.github.grooviter.stateit.core.Resource
@@ -11,7 +11,7 @@ import static MkdirErrors.ERROR_UNDEFINED
 
 @TupleConstructor
 @EqualsAndHashCode(includes = ["id"])
-class MkdirResource extends Resource {
+class DirectoryResource extends Resource {
     String id
     MkdirProps props
 

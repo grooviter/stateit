@@ -15,7 +15,7 @@ asciidoctor {
             'imagesdir'          : './images',
             'toc'                : 'left',
             'icons'              : 'font',
-            'toclevels'          : 3
+            'toclevels'          : 4
 }
 
 asciidoctorj {

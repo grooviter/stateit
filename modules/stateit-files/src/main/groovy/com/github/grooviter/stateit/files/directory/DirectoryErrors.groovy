@@ -1,4 +1,4 @@
-package com.github.grooviter.stateit.files.mkdir
+package com.github.grooviter.stateit.files.directory
 
 import com.github.grooviter.stateit.core.ErrorEnum
 import com.github.grooviter.stateit.core.ErrorType
