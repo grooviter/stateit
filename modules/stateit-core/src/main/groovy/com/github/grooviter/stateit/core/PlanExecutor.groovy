@@ -1,7 +1,6 @@
 package com.github.grooviter.stateit.core
 
 import groovy.json.JsonGenerator
-import groovy.json.JsonOutput
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
 
@@ -12,6 +11,7 @@ class PlanExecutor {
 
     Result<Plan> execute() {
         return Result.of(plan)
+            .sideEffect(PlanExecutor::showSummary)
             .flatMap(PlanExecutor::create)
             .flatMap(PlanExecutor::destroy)
             .flatMap(PlanExecutor::serializeState)
@@ -21,12 +21,18 @@ class PlanExecutor {
         return Result.of(plan)
     }
 
+    private static void showSummary(Plan plan) {
+        log.info "TO APPLY:\t ${plan.resourcesToApply.size()}"
+        log.info "TO REMOVE:\t ${plan.resourcesToRemove.size()}"
+    }
+
     private static Result<Plan> create(Plan stage) {
         List<Resource> applied = []
-        for (Resource resource : stage.resourcesDeclared) {
+        for (Resource resource : stage.resourcesToApply) {
             log.info "create ${resource.id}"
             Result<Resource> result = resource.create()
             if (result.isFailure()) {
+                log.error "error while applying [${resource.id}] -- ${result.error.code}"
                 return Result.error(resolvePlan(stage, applied, []), result.error)
             } else {
                 applied.add(resource)
@@ -59,13 +65,13 @@ class PlanExecutor {
                 return plan.resourcesApplied
             }
             .addConverter(Resource) { Resource resource, String key ->
-                return [id: resource.id, props: resource.props]
+                return [id: resource.id, props: resource.props, type: resource.getClass().name]
             }
             .addConverter(Dependency) { Dependency dependency, String key ->
                 return [parent: dependency.parent.id, target: dependency.targetField, source: dependency.sourceField]
             }.build()
 
-        log.info "save state"
+        log.info "saving state"
         File stateFile = new File(stage.statePath)
         stateFile.text = generator.toJson(stage)
         return Result.of(stage)
