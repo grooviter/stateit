@@ -17,6 +17,10 @@ class PlanExecutor {
             .flatMap(PlanExecutor::serializeState)
     }
 
+    Result<Plan> validate() {
+        return Result.of(plan)
+    }
+
     private static Result<Plan> create(Plan stage) {
         List<Resource> applied = []
         for (Resource resource : stage.resourcesDeclared) {

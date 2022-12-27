@@ -1,0 +1,21 @@
+plugins {
+    id 'groovy'
+    id 'application'
+}
+
+configurations {
+    groovydocs
+}
+
+dependencies {
+    implementation project(":stateit-files")
+    implementation "org.apache.groovy:groovy:$groovy"
+    implementation "org.apache.groovy:groovy-json:$groovy"
+    implementation "info.picocli:picocli-groovy:$picocli"
+
+    groovydocs "org.apache.groovy:groovy-all:$groovy"
+}
+
+application {
+    mainClassName("com.github.grooviter.stateit.cli.Entrypoint")
+}

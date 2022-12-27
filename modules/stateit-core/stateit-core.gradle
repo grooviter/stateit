@@ -10,7 +10,6 @@ configurations {
 dependencies {
     api "org.apache.groovy:groovy:$groovy"
     api "org.apache.groovy:groovy-json:$groovy"
-
     implementation "org.slf4j:slf4j-api:$slf4j"
     implementation "ch.qos.logback:logback-core:$logback"
     implementation "ch.qos.logback:logback-classic:$logback"
