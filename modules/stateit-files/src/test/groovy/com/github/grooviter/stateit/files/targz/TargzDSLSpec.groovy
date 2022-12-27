@@ -67,7 +67,7 @@ class TargzDSLSpec extends BaseSpecification {
 
         and:
         Plan plan = DSL.stateit {
-            def uncompressed = mkdir("id-data") {
+            def uncompressed = directory("id-data") {
                 path = uncompressedFile.absolutePath
             }
 

@@ -2,7 +2,7 @@ package com.github.grooviter.stateit.files.directory
 
 import com.github.grooviter.stateit.core.ResourceSerde
 
-class MkdirResourceSerde implements ResourceSerde<DirectoryResource> {
+class DirectoryResourceSerde implements ResourceSerde<DirectoryResource> {
     @Override
     DirectoryResource fromMap(Map<String, ?> rawValues) {
         Map props = rawValues.props as Map

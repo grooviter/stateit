@@ -8,7 +8,7 @@ class PlanExecutorSpec extends Specification {
         given:
         File dest = new File("/tmp/kk1")
         Plan plan = DSL.stateit {
-            mkdir("garbage") {
+            directory("garbage") {
                 path = dest.absolutePath
             }
         }
@@ -31,7 +31,7 @@ class PlanExecutorSpec extends Specification {
         given:
         File dest = new File("/notallowed")
         Plan plan = DSL.stateit {
-            mkdir("garbage") {
+            directory("garbage") {
                 path = dest.absolutePath
             }
         }
@@ -51,7 +51,7 @@ class PlanExecutorSpec extends Specification {
         given:
         File dest = new File("/notallowed")
         Plan plan = DSL.stateit {
-            mkdir("garbage") {
+            directory("garbage") {
                 path = dest.absolutePath
             }
         }
@@ -70,11 +70,11 @@ class PlanExecutorSpec extends Specification {
         File yesAllowed = new File("/tmp/kk3")
 
         Plan plan = DSL.stateit {
-            mkdir("treasure") {
+            directory("treasure") {
                 path = yesAllowed.absolutePath
             }
 
-            mkdir("garbage") {
+            directory("garbage") {
                 path = notAllowed.absolutePath
             }
         }
@@ -103,7 +103,7 @@ class PlanExecutorSpec extends Specification {
         File stateFile = new File("/tmp/state.json")
 
         Plan plan = DSL.stateit {
-            mkdir("treasure") {
+            directory("treasure") {
                 path = yesAllowed.absolutePath
             }
 

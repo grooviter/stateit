@@ -3,14 +3,14 @@ package com.github.grooviter.stateit.files
 import com.github.grooviter.stateit.DSL
 import com.github.grooviter.stateit.files.targz.TargzProps
 import com.github.grooviter.stateit.files.targz.TargzResource
-import com.github.grooviter.stateit.files.mkdir.MkdirProps
-import com.github.grooviter.stateit.files.mkdir.MkdirResource
+import com.github.grooviter.stateit.files.directory.DirectoryProps
+import com.github.grooviter.stateit.files.directory.DirectoryResource
 
 class FilesExtensionModule {
-    static MkdirResource mkdir(DSL dsl, String id, @DelegatesTo(MkdirProps) Closure closure) {
-        MkdirProps props = new MkdirProps()
-        props.with(closure.clone() as Closure<MkdirProps>)
-        MkdirResource resource = new MkdirResource(id, props)
+    static DirectoryResource directory(DSL dsl, String id, @DelegatesTo(DirectoryProps) Closure closure) {
+        DirectoryProps props = new DirectoryProps()
+        props.with(closure.clone() as Closure<DirectoryProps>)
+        DirectoryResource resource = new DirectoryResource(id, props)
         dsl.addDeclaredResource(resource)
         return resource
     }

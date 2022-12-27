@@ -6,14 +6,14 @@ import com.github.grooviter.stateit.core.Result
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.TupleConstructor
 
-import static MkdirErrors.ERROR_PATH_MISSING
-import static MkdirErrors.ERROR_UNDEFINED
+import static DirectoryErrors.ERROR_PATH_MISSING
+import static DirectoryErrors.ERROR_UNDEFINED
 
 @TupleConstructor
 @EqualsAndHashCode(includes = ["id"])
 class DirectoryResource extends Resource {
     String id
-    MkdirProps props
+    DirectoryProps props
 
     @Override
     Result<Resource> applyWhenCreating() {
