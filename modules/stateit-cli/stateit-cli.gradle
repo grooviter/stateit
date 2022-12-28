@@ -9,6 +9,7 @@ configurations {
 
 dependencies {
     implementation project(":stateit-files")
+    implementation project(":stateit-github")
     implementation "org.apache.groovy:groovy:$groovy"
     implementation "org.apache.groovy:groovy-json:$groovy"
     implementation "info.picocli:picocli-groovy:$picocli"
