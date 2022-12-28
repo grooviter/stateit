@@ -15,11 +15,11 @@ class TargzResource extends Resource {
     Result<Resource> applyWhenCreating() {
         try {
             if (TargzProps.Action.COMPRESS == this.props.action) {
-                CompressionUtil.compressTargz(this.props.input, this.props.output)
+                CompressionUtil.compressTargz(this.props.input, this.props.output, this.props.overwrite)
             }
 
             if (TargzProps.Action.EXTRACT == this.props.action) {
-                CompressionUtil.decompressTargz(this.props.input, this.props.output)
+                CompressionUtil.decompressTargz(this.props.input, this.props.output, this.props.overwrite)
             }
 
         } catch (IOException ignored) {

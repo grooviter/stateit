@@ -33,9 +33,20 @@ directory('id-directory') {
 ```
 
 [cols="1,1,1"]
-.directory
+.arguments
 |===
-| Property | Description | Default value
+| Name | Description | Default value
+
+|path
+|path to create the directory at
+|
+
+|===
+
+[cols="1,1,1"]
+.attributes
+|===
+| Name | Description | Default value
 
 |path
 |path to create the directory at
@@ -62,7 +73,7 @@ targz('id-directory') {
 ```
 
 [cols="1,1,1"]
-.targz
+.arguments
 |===
 | Property | Description | Default value
 
@@ -97,25 +108,13 @@ Provides resources that can be created in Github such as repository, security re
 
 ==== Github credentials
 
-[source,shell]
+[source,bash]
 .credentials using environment variables
 ----
 export STATEIT_GITHUB_USERNAME="username"
 export STATEIT_GITHUB_TOKEN="token"
 ----
 
-[source, groovy]
-.credentials using variables block
-```groovy
-variables {
-  github_user  = ""
-  github_token = ""
-}
-
-github_repository('id-directory') {
-  ...
-}
-```
 ==== State
 
 [source, groovy]

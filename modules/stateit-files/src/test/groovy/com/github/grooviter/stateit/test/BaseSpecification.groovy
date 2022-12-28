@@ -47,7 +47,7 @@ class BaseSpecification extends Specification {
     File createTarGzFile(String outputPath) {
         File tempDir = Files.createTempDirectory("stateit").toFile()
         createTextFilesInDir(tempDir, [hello: "hi!", bye: "bye!"])
-        CompressionUtil.compressTargz(tempDir.absolutePath, outputPath)
+        CompressionUtil.compressTargz(tempDir.absolutePath, outputPath, true)
         return new File(outputPath)
     }
 }

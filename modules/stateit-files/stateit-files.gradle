@@ -12,6 +12,7 @@ dependencies {
     api "org.apache.groovy:groovy-json:$groovy"
     api project(":stateit-core")
     implementation 'org.apache.commons:commons-compress:1.22'
+    implementation "org.slf4j:slf4j-api:$slf4j"
 
 
     groovydocs "org.apache.groovy:groovy-all:$groovy"
