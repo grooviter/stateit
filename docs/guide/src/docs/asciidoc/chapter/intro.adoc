@@ -14,7 +14,7 @@ def plan = stateit {
    }
 
    state {
-      path = "/tmp/example-state.json"
+      provider = fileState("/tmp/example-state.json")
    }
 }
 

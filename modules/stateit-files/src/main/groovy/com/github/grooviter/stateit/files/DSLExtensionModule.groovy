@@ -6,18 +6,18 @@ import com.github.grooviter.stateit.files.targz.TargzResource
 import com.github.grooviter.stateit.files.directory.DirectoryProps
 import com.github.grooviter.stateit.files.directory.DirectoryResource
 
-class FilesExtensionModule {
+import static com.github.grooviter.stateit.core.ClosureUtils.applyPropsToClosure
+
+class DSLExtensionModule {
     static DirectoryResource directory(DSL dsl, String id, @DelegatesTo(DirectoryProps) Closure closure) {
-        DirectoryProps props = new DirectoryProps()
-        props.with(closure.clone() as Closure<DirectoryProps>)
+        DirectoryProps props = applyPropsToClosure(new DirectoryProps(), closure)
         DirectoryResource resource = new DirectoryResource(id, props)
         dsl.addDeclaredResource(resource)
         return resource
     }
 
     static TargzResource targz(DSL dsl, String id, @DelegatesTo(TargzProps) Closure closure) {
-        TargzProps props = new TargzProps()
-        props.with(closure.clone() as Closure<TargzProps>)
+        TargzProps props = applyPropsToClosure(new TargzProps(), closure)
         TargzResource resource = new TargzResource(id, props)
         dsl.addDeclaredResource(resource)
         return resource

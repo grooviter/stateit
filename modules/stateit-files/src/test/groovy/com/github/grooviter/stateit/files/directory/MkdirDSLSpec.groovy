@@ -2,10 +2,11 @@ package com.github.grooviter.stateit.files.directory
 
 import com.github.grooviter.stateit.DSL
 import com.github.grooviter.stateit.core.Plan
+import com.github.grooviter.stateit.test.BaseSpecification
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
-class MkdirDSLSpec extends Specification {
+class MkdirDSLSpec extends BaseSpecification {
     void 'declaring one resource successfully'() {
         when:
         Plan plan = DSL.stateit {
@@ -67,7 +68,7 @@ class MkdirDSLSpec extends Specification {
             }
 
             state {
-                path = "/tmp/state.json"
+                provider = fileState("/tmp/state.json")
             }
         }
 
@@ -78,6 +79,7 @@ class MkdirDSLSpec extends Specification {
         plan.resourcesInState.size() == 2
 
         cleanup:
-        myDir.deleteDir()
+        deleteDirs(myDir)
+        deleteFiles(stateFile)
     }
 }

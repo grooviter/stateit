@@ -78,7 +78,7 @@ class TargzDSLSpec extends BaseSpecification {
             }
 
             state {
-                path = stateFile.absolutePath
+                provider = fileState(stateFile.absolutePath)
             }
         }
 

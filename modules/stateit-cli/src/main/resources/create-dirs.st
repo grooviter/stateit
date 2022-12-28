@@ -1,7 +1,3 @@
-state = {
-  path = "/tmp/mystate.json"
-}
-
 mkdir("create-temporal-dir-1") {
   path = "/tmp/randomdirectory-3"
 }
@@ -12,4 +8,8 @@ mkdir("create-temporal-dir-2") {
 
 mkdir("create-temporal-dir-3") {
   path = "/tmp/randomdirectory-3"
+}
+
+state {
+  provider = fileState("/tmp/mystate.json")
 }

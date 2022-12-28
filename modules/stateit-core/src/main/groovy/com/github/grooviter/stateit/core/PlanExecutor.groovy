@@ -1,6 +1,5 @@
 package com.github.grooviter.stateit.core
 
-import groovy.json.JsonGenerator
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
 
@@ -56,30 +55,19 @@ class PlanExecutor {
     }
 
     private static Result<Plan> serializeState(Plan stage) {
-        if (!stage.statePath) {
+        if (!stage.stateProvider) {
+            log.info "no state provider found skipping state storage"
             return Result.of(stage)
         }
 
-        JsonGenerator generator = new JsonGenerator.Options()
-            .addConverter(Plan) { Plan plan, String key ->
-                return plan.resourcesApplied
-            }
-            .addConverter(Resource) { Resource resource, String key ->
-                return [id: resource.id, props: resource.props, type: resource.getClass().name]
-            }
-            .addConverter(Dependency) { Dependency dependency, String key ->
-                return [parent: dependency.parent.id, target: dependency.targetField, source: dependency.sourceField]
-            }.build()
-
         log.info "saving state"
-        File stateFile = new File(stage.statePath)
-        stateFile.text = generator.toJson(stage)
-        return Result.of(stage)
+        return stage.stateProvider.store(stage)
     }
 
     private static Plan resolvePlan(Plan previous, List<Resource> applied, List<Resource> removed) {
         return Plan.builder()
             .statePath(previous.statePath)
+            .stateProvider(previous.stateProvider)
             .resourcesDeclared(previous.resourcesDeclared)
             .resourcesInState(new HashSet<>(previous.resourcesInState + applied - removed).toList())
             .build()

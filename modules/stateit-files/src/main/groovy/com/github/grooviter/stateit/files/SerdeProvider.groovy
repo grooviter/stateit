@@ -5,7 +5,7 @@ import com.github.grooviter.stateit.core.ResourceSerde
 import com.github.grooviter.stateit.files.targz.TargzResourceSerde
 import com.github.grooviter.stateit.files.directory.DirectoryResourceSerde
 
-class FilesProvider implements Provider {
+class SerdeProvider implements Provider {
     Map<String, ResourceSerde<?>> SERDES =  [
             new DirectoryResourceSerde(),
             new TargzResourceSerde()

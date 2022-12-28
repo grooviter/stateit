@@ -1,9 +1,10 @@
 package com.github.grooviter.stateit.core
 
 import com.github.grooviter.stateit.DSL
+import com.github.grooviter.stateit.test.BaseSpecification
 import spock.lang.Specification
 
-class PlanExecutorSpec extends Specification {
+class PlanExecutorSpec extends BaseSpecification {
     void 'executing a plan successfully'() {
         given:
         File dest = new File("/tmp/kk1")
@@ -24,7 +25,7 @@ class PlanExecutorSpec extends Specification {
         dest.exists()
 
         cleanup:
-        dest.deleteDir()
+        deleteDirs(dest)
     }
 
     void 'executing a wrong plan stops execution'() {
@@ -94,7 +95,7 @@ class PlanExecutorSpec extends Specification {
         }
 
         cleanup:
-        yesAllowed.deleteDir()
+        deleteDirs(yesAllowed)
     }
 
     void 'saving the plan execution state successfully'() {
@@ -108,7 +109,7 @@ class PlanExecutorSpec extends Specification {
             }
 
             state {
-                path = stateFile.absolutePath
+                provider = fileState(stateFile.absolutePath)
             }
         }
 
@@ -123,6 +124,7 @@ class PlanExecutorSpec extends Specification {
         stateFile.exists()
 
         cleanup:
-        yesAllowed.deleteDir()
+        deleteDirs(yesAllowed)
+        deleteFiles(stateFile)
     }
 }
