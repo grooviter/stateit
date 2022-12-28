@@ -1,4 +1,4 @@
-package com.github.grooviter.stateit
+package com.github.grooviter.stateit.github.repository
 
 import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.core.Result
@@ -9,7 +9,7 @@ import static com.github.grooviter.stateit.DSL.stateit
 import static com.github.grooviter.stateit.DSL.validate
 import static com.github.grooviter.stateit.github.common.CredentialsResolver.resolveCredentials
 
-class DSLSpec extends Specification {
+class RepositoryDSLSpec extends Specification {
     void 'validating a repository fails when missing its name'() {
         when:
         Result<Plan> result = validate stateit {
