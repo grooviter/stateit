@@ -64,6 +64,14 @@ class Result<T> {
         return Result.of(fn.apply(this.context))
     }
 
+    public <B> Result<B> mapTry(Function<T, B> fn, ExceptionHandler handler) {
+        try {
+            return of(fn.apply(this.context))
+        } catch (Throwable th) {
+            return handler.handle(th)
+        }
+    }
+
     public <C, B> Result<C> mapWith(Result<B> with, BiFunction<T, B, C> fn) {
         return this.flatMap((T context) -> with.map((B o) -> fn.apply(context, o)))
     }
@@ -145,6 +153,13 @@ class Result<T> {
 
     Result<T> orContext(T context) {
         if (this.isFailure()) {
+            return Result.of(context)
+        }
+        return this
+    }
+
+    public <U> Result<U> ifSuccessReturnThis(U context) {
+        if (this.isSuccess()) {
             return Result.of(context)
         }
         return this
