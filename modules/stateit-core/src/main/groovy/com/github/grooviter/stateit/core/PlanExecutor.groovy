@@ -17,6 +17,23 @@ class PlanExecutor {
     }
 
     Result<Plan> validate() {
+        log.info "validating resources to apply"
+        return Result.of(plan)
+            .sideEffect(PlanExecutor::showSummary)
+            .flatMap(PlanExecutor::validateResourcesToApply)
+    }
+
+    private static Result<Plan> validateResourcesToApply(Plan plan) {
+        Result<Resource> failed = plan.resourcesToApply
+            .collect { it.validate() }
+            .find { it.isFailure() }
+
+        if (failed) {
+            log.info "validation failed!"
+            log.info "resource: ${failed.context.id} - error: ${failed.error.code}"
+            return Result.error(plan, failed.error)
+        }
+
         return Result.of(plan)
     }
 

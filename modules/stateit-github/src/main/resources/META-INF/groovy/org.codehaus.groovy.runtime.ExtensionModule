@@ -1,0 +1,3 @@
+moduleName=Stateit DSL Github Extension Module
+moduleVersion=1.0.0
+extensionClasses=com.github.grooviter.stateit.github.DSLExtensionModule
