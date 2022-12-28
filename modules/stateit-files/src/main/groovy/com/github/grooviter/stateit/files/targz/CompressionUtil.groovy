@@ -87,7 +87,7 @@ class CompressionUtil {
         return tarFile
     }
 
-    private static File expandTarFile(TarFile tarFile, File destinationDir) {
+    private static void expandTarFile(TarFile tarFile, File destinationDir) {
         destinationDir.mkdirs()
         final byte[] buffer = new byte[1024];
         tarFile.entries.each { TarArchiveEntry entry ->
@@ -102,6 +102,5 @@ class CompressionUtil {
                 }
             }
         }
-        return null
     }
 }
