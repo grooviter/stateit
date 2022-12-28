@@ -1,0 +1,3 @@
+moduleName=Stateit DSL Utility functions Extension Module
+moduleVersion=1.0.0
+staticExtensionClasses=com.github.grooviter.stateit.functions.DateFunctions
