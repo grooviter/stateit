@@ -7,6 +7,8 @@ import spock.lang.Specification
 
 import static com.github.grooviter.stateit.DSL.stateit
 import static com.github.grooviter.stateit.DSL.validate
+import static com.github.grooviter.stateit.DSL.execute
+import static com.github.grooviter.stateit.DSL.destroy
 import static com.github.grooviter.stateit.github.common.CredentialsResolver.resolveCredentials
 
 class RepositoryDSLSpec extends Specification {
@@ -69,5 +71,22 @@ class RepositoryDSLSpec extends Specification {
 
         then:
         result.isSuccess()
+    }
+
+    @IgnoreIf({ resolveCredentials().failure })
+    void 'create a repository succeeds'() {
+        given:
+        Plan plan = stateit {
+            github_repository("shine/hope") {
+                owner = "shine"
+                name  = "hope"
+            }
+        }
+
+        expect:
+        execute plan isSuccess()
+
+        cleanup:
+        destroy plan
     }
 }

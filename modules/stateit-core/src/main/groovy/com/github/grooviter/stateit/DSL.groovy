@@ -24,6 +24,10 @@ class DSL {
         return new PlanExecutor(plan).execute()
     }
 
+    static Result<Plan> destroy(Plan plan){
+        return new PlanExecutor(plan).destroy()
+    }
+
     static Plan stateit(@DelegatesTo(DSL) Closure closure) {
         DSL dsl = applyPropsToClosure(new DSL(), closure)
         return Plan.builder()

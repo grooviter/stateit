@@ -9,7 +9,7 @@ import org.kohsuke.github.GitHubBuilder
 
 class GithubClient {
     static GitHub createGithubClient(Credentials credentials) {
-        return new GitHubBuilder().withOAuthToken(credentials.username, credentials.token).build()
+        return new GitHubBuilder().withOAuthToken(credentials.token, credentials.username).build()
     }
 
     static Result<Resource> handleException(Throwable th){

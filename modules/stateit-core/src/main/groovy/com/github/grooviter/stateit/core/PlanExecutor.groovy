@@ -12,15 +12,18 @@ class PlanExecutor {
         return Result.of(plan)
             .sideEffect(PlanExecutor::showSummary)
             .flatMap(PlanExecutor::create)
-            .flatMap(PlanExecutor::destroy)
+            .flatMap(PlanExecutor::destroyOrphans)
             .flatMap(PlanExecutor::serializeState)
     }
 
     Result<Plan> validate() {
         log.info "validating resources to apply"
-        return Result.of(plan)
-            .sideEffect(PlanExecutor::showSummary)
-            .flatMap(PlanExecutor::validateResourcesToApply)
+        return Result.of(plan).sideEffect(PlanExecutor::showSummary).flatMap(PlanExecutor::validateResourcesToApply)
+    }
+
+    Result<Plan> destroy() {
+        log.info "destroy all resources apply"
+        // TODO
     }
 
     private static Result<Plan> validateResourcesToApply(Plan plan) {
@@ -57,7 +60,7 @@ class PlanExecutor {
         return Result.of(resolvePlan(stage, applied, []))
     }
 
-    private static Result<Plan> destroy(Plan stage) {
+    private static Result<Plan> destroyOrphans(Plan stage) {
         List<Resource> removed = []
         for (Resource resource : stage.resourcesToRemove) {
             log.info "destroy ${resource.id}"
