@@ -8,8 +8,8 @@ For example, here you have a Groovy script executing two different task, the fir
 @Grab('com.github.grooviter:stateit-files:1.0.0')
 import com.github.grooviter.stateit.DSL.*
 
-def plan = stateit {
-   mkdir("sample-directory") {
+execute stateit {
+   directory("sample-directory") {
       path = "/tmp/sample-directory"
    }
 
@@ -17,8 +17,6 @@ def plan = stateit {
       provider = fileState("/tmp/example-state.json")
    }
 }
-
-apply(plan)
 ```
 
 If you execute the script:

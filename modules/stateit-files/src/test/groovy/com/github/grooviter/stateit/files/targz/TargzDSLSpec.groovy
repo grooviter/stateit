@@ -1,9 +1,11 @@
 package com.github.grooviter.stateit.files.targz
 
-import com.github.grooviter.stateit.DSL
 import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.core.Result
 import com.github.grooviter.stateit.test.BaseSpecification
+
+import static com.github.grooviter.stateit.DSL.stateit
+import static com.github.grooviter.stateit.DSL.execute
 
 class TargzDSLSpec extends BaseSpecification {
     void 'create a tar.gz from a directory successfully'() {
@@ -14,8 +16,8 @@ class TargzDSLSpec extends BaseSpecification {
         and:
         createTextFilesInDir(uncompressed, [hello: "hi!", bye: "bye"])
 
-        and:
-        Plan plan = DSL.stateit {
+        when:
+        Result<Plan> result = execute stateit {
             targz("test-dir-gzip") {
                 input  = uncompressed.absolutePath
                 output = compressed.absolutePath
@@ -23,11 +25,8 @@ class TargzDSLSpec extends BaseSpecification {
             }
         }
 
-        when:
-        Result<Plan> planExecutionResult = executePlan(plan)
-
         then:
-        planExecutionResult.isSuccess()
+        result.isSuccess()
 
         cleanup:
         deleteDirs(uncompressed)
@@ -39,8 +38,8 @@ class TargzDSLSpec extends BaseSpecification {
         File compressed = createTarGzFile("/tmp/compressed.tar.gz")
         File uncompressed = file("/tmp/uncompressed")
 
-        and:
-        Plan plan = DSL.stateit {
+        when:
+        Result<Plan> result = execute stateit {
             targz("test-dir-gzip") {
                 input  = compressed.absolutePath
                 output = uncompressed.absolutePath
@@ -48,11 +47,8 @@ class TargzDSLSpec extends BaseSpecification {
             }
         }
 
-        when:
-        Result<Plan> planExecutionResult = executePlan(plan)
-
         then:
-        planExecutionResult.isSuccess()
+        result.isSuccess()
 
         cleanup:
         deleteDirs(uncompressed)
@@ -65,8 +61,8 @@ class TargzDSLSpec extends BaseSpecification {
         File uncompressedFile = file("/tmp/ooo")
         File stateFile = file("/tmp/superstate.json")
 
-        and:
-        Plan plan = DSL.stateit {
+        when:
+        Result<Plan> result = execute stateit {
             def uncompressed = directory("id-data") {
                 path = uncompressedFile.absolutePath
             }
@@ -82,11 +78,8 @@ class TargzDSLSpec extends BaseSpecification {
             }
         }
 
-        when:
-        Result<Plan> executedPlan = executePlan(plan)
-
         then:
-        executedPlan.isSuccess()
+        result.isSuccess()
 
         cleanup:
         deleteDirs(uncompressedFile)
