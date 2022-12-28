@@ -1,12 +1,10 @@
 package com.github.grooviter.stateit.files.targz
 
 import com.github.grooviter.stateit.core.Resource
+import com.github.grooviter.stateit.core.ResourceConventions
 import com.github.grooviter.stateit.core.Result
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.TupleConstructor
 
-@TupleConstructor
-@EqualsAndHashCode(includes = ["id"])
+@ResourceConventions
 class TargzResource extends Resource {
     String id
     TargzProps props

@@ -1,21 +1,16 @@
 package com.github.grooviter.stateit.github.repository
 
 import com.github.grooviter.stateit.core.Resource
+import com.github.grooviter.stateit.core.ResourceConventions
 import com.github.grooviter.stateit.core.Result
 import com.github.grooviter.stateit.github.common.Credentials
 import com.github.grooviter.stateit.github.common.CredentialsResolver
 import com.github.grooviter.stateit.github.common.GithubClient
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.TupleConstructor
-import org.kohsuke.github.GHCreateRepositoryBuilder
-import org.kohsuke.github.GHRepository
-import org.kohsuke.github.GitHub
 
 import static com.github.grooviter.stateit.github.repository.RepositoryErrors.ERROR_NAME_MISSING
 import static com.github.grooviter.stateit.github.repository.RepositoryErrors.ERROR_OWNER_MISSING
 
-@TupleConstructor
-@EqualsAndHashCode(includes = ["id"])
+@ResourceConventions
 class RepositoryResource extends Resource {
     String id
     RepositoryProps props

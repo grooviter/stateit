@@ -2,15 +2,13 @@ package com.github.grooviter.stateit.files.directory
 
 import com.github.grooviter.stateit.core.Dependency
 import com.github.grooviter.stateit.core.Resource
+import com.github.grooviter.stateit.core.ResourceConventions
 import com.github.grooviter.stateit.core.Result
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.TupleConstructor
 
 import static DirectoryErrors.ERROR_PATH_MISSING
 import static DirectoryErrors.ERROR_UNDEFINED
 
-@TupleConstructor
-@EqualsAndHashCode(includes = ["id"])
+@ResourceConventions
 class DirectoryResource extends Resource {
     String id
     DirectoryProps props
