@@ -5,7 +5,7 @@ import com.github.grooviter.stateit.core.ResourceSerde
 
 class SerdeProvider implements Provider {
     @Override
-    ResourceSerde getSerdeByType(String type) {
-        return null
+    List<ResourceSerde> getResourceSerdeList() {
+        return []
     }
 }

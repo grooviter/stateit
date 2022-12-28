@@ -6,17 +6,11 @@ import com.github.grooviter.stateit.files.targz.TargzResourceSerde
 import com.github.grooviter.stateit.files.directory.DirectoryResourceSerde
 
 class SerdeProvider implements Provider {
-    Map<String, ResourceSerde<?>> SERDES =  [
+    @Override
+    List<ResourceSerde> getResourceSerdeList() {
+        return [
             new DirectoryResourceSerde(),
             new TargzResourceSerde()
-    ].collectEntries { process it }
-
-    @Override
-    ResourceSerde<?> getSerdeByType(String type) {
-        return SERDES[type]
-    }
-
-    private static Map<String, ResourceSerde> process(ResourceSerde resourceSerde){
-        return [(resourceSerde.getType()): resourceSerde]
+        ]
     }
 }

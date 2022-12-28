@@ -42,9 +42,11 @@ class FileStateProvider implements StateProvider {
 
         log.info "state file found... loading resources"
         List<Map<String, ?>> resourceList = new JsonSlurper().parse(jsonFile) as List<Map<String,?>>
-        List<Resource> resources = resourceList.collect { Map<String, ?> resource ->
-            return Providers.instance.resolveSerdeByType(resource.type.toString()).fromMap(resource)
-        } as List<Resource>
+        Providers providers = Providers.instance
+        List<Resource> resources = resourceList
+                .collect { Map<String, ?> resource ->
+                    return providers.resolveSerdeByType(resource.type.toString())?.fromMap(resource)
+                } as List<Resource>
 
         return Result.of(Plan.builder().resourcesInState(resources).build())
     }
