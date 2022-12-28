@@ -106,7 +106,7 @@ targz('id-directory') {
 
 Provides resources that can be created in Github such as repository, security restrictions, branches...etc.
 
-==== Github credentials
+==== Credentials
 
 [source,bash]
 .credentials using environment variables
