@@ -14,6 +14,9 @@ dependencies {
     implementation "org.apache.groovy:groovy-json:$groovy"
     implementation "info.picocli:picocli-groovy:$picocli"
 
+    implementation "ch.qos.logback:logback-core:$logback"
+    implementation "ch.qos.logback:logback-classic:$logback"
+
     groovydocs "org.apache.groovy:groovy-all:$groovy"
 }
 

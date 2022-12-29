@@ -12,6 +12,7 @@ dependencies {
     api "org.apache.groovy:groovy-json:$groovy"
     api project(":stateit-core")
     implementation "org.kohsuke:github-api:1.313"
+    implementation "org.slf4j:slf4j-api:$slf4j"
 
     groovydocs "org.apache.groovy:groovy-all:$groovy"
     testImplementation "org.spockframework:spock-core:2.4-M1-groovy-4.0"

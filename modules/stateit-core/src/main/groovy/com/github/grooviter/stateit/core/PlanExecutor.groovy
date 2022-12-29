@@ -18,12 +18,31 @@ class PlanExecutor {
 
     Result<Plan> validate() {
         log.info "validating resources to apply"
-        return Result.of(plan).sideEffect(PlanExecutor::showSummary).flatMap(PlanExecutor::validateResourcesToApply)
+        return Result.of(plan)
+            .sideEffect(PlanExecutor::showSummary)
+            .flatMap(PlanExecutor::validateResourcesToApply)
     }
 
     Result<Plan> destroy() {
-        log.info "destroy all resources apply"
-        // TODO
+        log.info "destroying all resources apply"
+        return Result.of(plan)
+            .sideEffect { log.info "deleting ALL (${it.resourcesInState.size()}) resources" }
+            .flatMap(PlanExecutor::deleteAllResources)
+            .flatMap(PlanExecutor::serializeState)
+    }
+
+    private static Result<Plan> deleteAllResources(Plan stage) {
+        List<Resource> removed = []
+        for (Resource resource : stage.resourcesInState) {
+            log.info "destroy ${resource.id}"
+            Result<Resource> result = resource.applyWhenDestroying()
+            if (result.isFailure()) {
+                return Result.error(resolvePlan(stage, [], removed), result.error)
+            } else {
+                removed.add(resource)
+            }
+        }
+        return Result.of(resolvePlan(stage, [], removed))
     }
 
     private static Result<Plan> validateResourcesToApply(Plan plan) {
@@ -86,7 +105,6 @@ class PlanExecutor {
 
     private static Plan resolvePlan(Plan previous, List<Resource> applied, List<Resource> removed) {
         return Plan.builder()
-            .statePath(previous.statePath)
             .stateProvider(previous.stateProvider)
             .resourcesDeclared(previous.resourcesDeclared)
             .resourcesInState(new HashSet<>(previous.resourcesInState + applied - removed).toList())

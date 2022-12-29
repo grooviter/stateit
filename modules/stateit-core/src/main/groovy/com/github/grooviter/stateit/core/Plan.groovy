@@ -2,9 +2,8 @@ package com.github.grooviter.stateit.core
 
 import groovy.transform.builder.Builder
 
-@Builder(includes = ["statePath", "stateProvider", "resourcesDeclared", "resourcesInState"])
+@Builder(includes = ["stateProvider", "resourcesDeclared", "resourcesInState"])
 class Plan {
-    String statePath
     StateProvider stateProvider
     List<Resource> resourcesDeclared
     List<Resource> resourcesInState
