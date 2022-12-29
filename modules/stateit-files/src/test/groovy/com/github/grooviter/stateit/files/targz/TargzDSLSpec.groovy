@@ -2,19 +2,17 @@ package com.github.grooviter.stateit.files.targz
 
 import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.core.Result
-import com.github.grooviter.stateit.test.BaseSpecification
+import com.github.grooviter.stateit.testing.FileUtilsAware
+import spock.lang.Specification
 
 import static com.github.grooviter.stateit.DSL.stateit
 import static com.github.grooviter.stateit.DSL.execute
 
-class TargzDSLSpec extends BaseSpecification {
+class TargzDSLSpec extends Specification implements FileUtilsAware {
     void 'create a tar.gz from a directory successfully'() {
         given:
         File uncompressed = mkdir("/tmp/test-dir")
         File compressed = file("/tmp/test-dir.tar.gz")
-
-        and:
-        createTextFilesInDir(uncompressed, [hello: "hi!", bye: "bye"])
 
         when:
         Result<Plan> result = execute stateit {
@@ -28,6 +26,9 @@ class TargzDSLSpec extends BaseSpecification {
         then:
         result.isSuccess()
 
+        and:
+        compressed.exists()
+
         cleanup:
         deleteDirs(uncompressed)
         deleteFiles(compressed)
@@ -35,7 +36,7 @@ class TargzDSLSpec extends BaseSpecification {
 
     void 'decompress a tar.gz successfully'() {
         given:
-        File compressed = createTarGzFile("/tmp/compressed.tar.gz")
+        File compressed = createTarGzFile()
         File uncompressed = file("/tmp/uncompressed")
 
         when:
@@ -53,6 +54,16 @@ class TargzDSLSpec extends BaseSpecification {
         cleanup:
         deleteDirs(uncompressed)
         deleteFiles(compressed)
+    }
+
+    File createTarGzFile() {
+        File directoryToCompress = mkdirRandom()
+        File directoryContent = randomFileWithContent("something")
+        mvFileToDir(directoryContent, directoryToCompress)
+        File compressedFile = randomFileRefWithSuffix("tar.gz")
+        CompressionUtil.compressTargz(directoryToCompress.absolutePath, compressedFile.absolutePath, false)
+        directoryToCompress.deleteDir()
+        return compressedFile
     }
 
     void 'using dependencies'() {

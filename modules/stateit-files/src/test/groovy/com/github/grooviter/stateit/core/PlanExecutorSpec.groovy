@@ -1,10 +1,10 @@
 package com.github.grooviter.stateit.core
 
 import com.github.grooviter.stateit.DSL
-import com.github.grooviter.stateit.test.BaseSpecification
+import com.github.grooviter.stateit.testing.FileUtilsAware
 import spock.lang.Specification
 
-class PlanExecutorSpec extends BaseSpecification {
+class PlanExecutorSpec extends Specification implements FileUtilsAware {
     void 'executing a plan successfully'() {
         given:
         File dest = new File("/tmp/kk1")

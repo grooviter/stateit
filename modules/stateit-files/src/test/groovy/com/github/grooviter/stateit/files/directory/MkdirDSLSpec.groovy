@@ -2,14 +2,15 @@ package com.github.grooviter.stateit.files.directory
 
 import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.core.Result
-import com.github.grooviter.stateit.test.BaseSpecification
+import com.github.grooviter.stateit.testing.FileUtilsAware
 import groovy.json.JsonOutput
+import spock.lang.Specification
 
 import static com.github.grooviter.stateit.DSL.stateit
 import static com.github.grooviter.stateit.DSL.validate
 import static com.github.grooviter.stateit.DSL.destroy
 
-class MkdirDSLSpec extends BaseSpecification {
+class MkdirDSLSpec extends Specification implements FileUtilsAware {
     void 'declaring one resource successfully'() {
         when:
         Plan plan = stateit {

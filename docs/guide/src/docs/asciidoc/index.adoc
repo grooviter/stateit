@@ -17,6 +17,8 @@ include::{includeDir}/chapter/execution.adoc[]
 
 include::{includeDir}/chapter/design.adoc[]
 
-include::{includeDir}/chapter/providers.adoc[]
+include::{includeDir}/chapter/variables.adoc[]
 
 include::{includeDir}/chapter/functions.adoc[]
+
+include::{includeDir}/chapter/providers.adoc[]

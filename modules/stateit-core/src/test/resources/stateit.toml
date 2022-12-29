@@ -1,0 +1,10 @@
+[vars]
+organization = ""
+environment  = ""
+
+[vars.github]
+owner = "grooviter"
+
+[secrets.github]
+token    = ""
+username = ""

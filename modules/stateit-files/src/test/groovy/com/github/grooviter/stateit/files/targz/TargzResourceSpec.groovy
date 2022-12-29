@@ -2,9 +2,10 @@ package com.github.grooviter.stateit.files.targz
 
 import com.github.grooviter.stateit.core.Resource
 import com.github.grooviter.stateit.core.Result
+import com.github.grooviter.stateit.testing.FileUtilsAware
 import spock.lang.Specification
 
-class TargzResourceSpec extends Specification {
+class TargzResourceSpec extends Specification implements FileUtilsAware {
     void 'creating a gzip resource without INPUT path should fail'() {
         when:
         TargzProps props = new TargzProps()
@@ -33,11 +34,10 @@ class TargzResourceSpec extends Specification {
 
     void 'creating a gzip resource with all parameters succeeds'() {
         given:
-        File inputFile = new File("/tmp/to-compress")
+        File inputFile = mkdir("/tmp/to-compress")
         File outputFile = new File("/tmp/to-compress.tar.gz")
 
         when:
-        inputFile.mkdir()
         TargzProps props = new TargzProps()
         props.input = inputFile.absolutePath
         props.output = outputFile.absolutePath
@@ -47,7 +47,7 @@ class TargzResourceSpec extends Specification {
         result.isSuccess()
 
         cleanup:
-        inputFile.deleteDir()
-        inputFile.delete()
+        deleteDirs(inputFile)
+        deleteFiles(inputFile)
     }
 }
