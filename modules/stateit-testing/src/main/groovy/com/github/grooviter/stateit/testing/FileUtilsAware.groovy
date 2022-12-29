@@ -32,7 +32,7 @@ trait FileUtilsAware {
         return new File(filePath)
     }
 
-    void mvFileToDir(File file, File directory) {
+    void cpFileToDir(File file, File directory) {
         Files.copy(file.toPath(), new File(directory, file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 

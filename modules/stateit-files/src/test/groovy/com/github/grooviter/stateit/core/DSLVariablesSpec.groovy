@@ -33,5 +33,6 @@ class DSLVariablesSpec extends Specification implements FileUtilsAware {
 
         cleanup:
         deleteDirs(directoryRef)
+        deleteFiles(variablesFile)
     }
 }

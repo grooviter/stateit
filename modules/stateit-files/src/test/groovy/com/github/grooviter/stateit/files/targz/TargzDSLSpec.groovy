@@ -59,7 +59,8 @@ class TargzDSLSpec extends Specification implements FileUtilsAware {
     File createTarGzFile() {
         File directoryToCompress = mkdirRandom()
         File directoryContent = randomFileWithContent("something")
-        mvFileToDir(directoryContent, directoryToCompress)
+        cpFileToDir(directoryContent, directoryToCompress)
+        directoryContent.delete()
         File compressedFile = randomFileRefWithSuffix("tar.gz")
         CompressionUtil.compressTargz(directoryToCompress.absolutePath, compressedFile.absolutePath, false)
         directoryToCompress.deleteDir()
@@ -69,13 +70,13 @@ class TargzDSLSpec extends Specification implements FileUtilsAware {
     void 'using dependencies'() {
         given:
         File compressed = file("/tmp/test-dir.tar.gz")
-        File uncompressedFile = file("/tmp/ooo")
+        File uncompressedDir = file("/tmp/ooo")
         File stateFile = file("/tmp/superstate.json")
 
         when:
         Result<Plan> result = execute stateit {
             def uncompressed = directory("id-data") {
-                path = uncompressedFile.absolutePath
+                path = uncompressedDir.absolutePath
             }
 
             targz("test-dir-gzip") {
@@ -93,7 +94,7 @@ class TargzDSLSpec extends Specification implements FileUtilsAware {
         result.isSuccess()
 
         cleanup:
-        deleteDirs(uncompressedFile)
-        deleteFiles(stateFile)
+        deleteDirs(uncompressedDir)
+        deleteFiles(stateFile, compressed)
     }
 }

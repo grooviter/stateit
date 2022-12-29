@@ -22,11 +22,13 @@ class CompressionUtil {
             return
         }
 
-        compressFile(createTarFile(new File(inputFile)), outputFile)
+        File tarFile = createTarFile(new File(inputFile))
+        compressFile(tarFile, outputFile)
+        tarFile.delete()
     }
 
     private static File createTarFile(File sourceDir) {
-        File tarFile = Files.createTempFile("statit", "").toFile()
+        File tarFile = Files.createTempFile("stateit", "tar").toFile()
         TarArchiveOutputStream tarOutput = new TarArchiveOutputStream(tarFile.newDataOutputStream())
 
         sourceDir.listFiles().each {
@@ -65,10 +67,13 @@ class CompressionUtil {
             log.info "output file exists and can't overwrite skipping"
         }
 
-        expandTarFile(uncompressFile(inputFile), destinationDir)
+        File uncompressedFile = uncompressFile(inputFile)
+        TarFile tarFile = new TarFile(uncompressedFile)
+        expandTarFile(tarFile, destinationDir)
+        uncompressedFile.delete()
     }
 
-    private static TarFile uncompressFile(String inputFile) {
+    private static File uncompressFile(String inputFile) {
         InputStream fin = Files.newInputStream(Paths.get(inputFile));
         BufferedInputStream bis = new BufferedInputStream(fin);
         Path temporalTarFile = Files.createTempFile("stateit", "")
@@ -83,8 +88,7 @@ class CompressionUtil {
         out.close();
         gzIn.close();
 
-        TarFile tarFile = new TarFile(temporalTarFile.toFile())
-        return tarFile
+        temporalTarFile.toFile()
     }
 
     private static void expandTarFile(TarFile tarFile, File destinationDir) {
