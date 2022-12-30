@@ -1,3 +1,82 @@
-== Variables
+== Variables & Secrets
 
-TODO
+At some point you may parametrize your plans with variables instead of hardcoding those values. StateIT by default
+uses TOML files. Inside these files the convention is that:
+
+- **NON SENSITIVE** values should be placed under the **vars** group.
+- **SENSITIVE** values should be placed under **secrets**.
+
+[source, toml]
+.stateit.vars.toml
+----
+[vars]
+...
+
+[secrets]
+...
+----
+
+=== Resolution
+
+==== default
+
+By default StateIT looks for a TOML variable file named **stateit.vars.toml** in these locations:
+
+- At the StateIT directory at $HOME ($HOME/.stateit)
+- In the same directory as the executed plan file
+
+==== specific file
+
+You can always pass a variables file as an argument using **--var-file**:
+
+[source, shell]
+.specific file
+----
+stateit --plan /path/to/plan/plan.st --var-file /path/to/var/file/stateit.vars.toml
+----
+
+=== Variables
+
+To reference a variable in the plan file you can use the **var_** variable followed by the name of the
+variable you'd like to resolve:
+
+[source, groovy]
+.variables example
+----
+repository("sample-dir") {
+    path  = var_.sample_dir_path
+}
+----
+
+The variable should be present in the **vars** section of the **stateit.vars.toml** file:
+[source, toml]
+.stateit.vars.toml
+----
+[vars]
+sample_dir_path="/tmp/example_dir"
+----
+
+=== Secrets
+
+Some variables like passwords, and credentials in general require to have a special consideration.
+These values won't be shown in console output. This time to reference a secret in your plan you can
+use the **sec_** variable followed by the name of the secret:
+
+[source, groovy]
+.github example
+----
+github_repository("sample-dir") {
+    username  = sec_.github_username
+    password  = sec_.github_token
+}
+----
+
+The secret should be declared in the **stateit.vars.toml** file in the **secrets** section:
+
+[source, toml]
+.stateit.vars.toml
+----
+[secrets]
+github_username=username
+github_token=token
+----

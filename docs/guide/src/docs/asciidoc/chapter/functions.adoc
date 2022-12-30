@@ -1,7 +1,24 @@
 == Functions
 
-TODO
+Although StateIT tries to be very concise, however there are a set of utility functions available in every plan that will help
+to reduce even more the code of the plan.
 
 === Date
 
+Date functions help to create dates for different tasks (e.g. generate a file name with the current date):
+
+==== now()
+
 TODO
+
+==== now(pattern)
+
+TODO
+
+[source, groovy]
+.now(pattern)
+----
+directory('todays-backup') {
+  path  = "/backups/${now('yyyy-MM-dd')}"
+}
+----
