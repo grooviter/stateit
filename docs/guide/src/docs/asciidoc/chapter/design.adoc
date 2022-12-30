@@ -1,3 +1,32 @@
-== Design
+== StateIT process
 
-TODO
+At 1000 feet the StateIT process is pretty simple:
+
+[ditaa]
+----
+                                                                        +----------------------------------------------------------+
+                                                                        |                                                          |
+                                                                        |              /--------------\                            |
+                                                                        |              |     APPLY    |---------+                  |
+                                                                        |              \-------+------/         |                  |
+                                                                        |                      ^                |                  |
+                                                                        |                      |                v                  v
+/------\         /------------\        /-------------\        /------+------\                  |          /------------\        /------\
+| cBLU |-------->|    PLAN    |        |    PROPS    |        |    PLAN     |                  |          |    STATE   |------->| cBLU |
+\------/         |   PARSING  +------->|  RESOLUTION +------->|  VALIDATION +------------------+          |   STORAGE  |        \------/
+                 \------------/        \-------------/        \-------------/                  |          \------------/
+                                                                                               |                ^
+                                                                                               |                |
+                                                                                               v                |
+                                                                                       /-------+------\         |
+                                                                                       |    DESTROY   |---------+
+                                                                                       \--------------/
+
+----
+
+- Plan file is **parsed**
+- Each resource found in plan has its **properties resolved** including their **dependencies** with other resources
+- Once resources are build and populated, all of them are **validated**
+- If the process goal was only to validate the plan, the process ends showing the result of the validation
+- Anyway regardless of the goal if the plan is not valid the process ends there
+- If the goal of the process is other than validation resources are applied or destroyed and then the process ends

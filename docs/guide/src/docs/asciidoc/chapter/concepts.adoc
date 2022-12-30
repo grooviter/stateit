@@ -2,16 +2,111 @@
 
 === Plan
 
-TODO
+A plan is a manifest file where you can:
+
+- describe a set of **resources**
+- describe how the **state** of these resources will be stored
+
+In practice a plan is a groovy file with a **.st** suffix:
+
+[source, groovy]
+.plan.st
+----
+resource1('id1') { ... } // <1>
+resource2('id2') { ... }
+resource2('id3') { ... }
+
+state {
+  provider = fileState('/path/to/state.json') // <2>
+}
+----
+
+<1> resources declared in the plan
+<2> state storage, or where and how the state of the resources will be stored
 
 === Resource
 
-TODO
+A resource represents something inside a system having state. For instance:
+
+- a Github repository (can be created, removed, having permissions....)
+- a local directory which (could be created or removed)
+- a database (could be created, could have tables...)
+- ...you name it
+
+A resource has at least and **ID** and **some properties** needed to create the resource.
+
+[source, groovy]
+.resource
+----
+resource1('id-of-the-resource') {  // <1>
+    property1 = "property value"    // <2>
+    property2 = "value"
+    propertyN = "value"
+}
+----
+
+<1> ID
+<2> properties
 
 === State
 
-TODO
+When StateIT executes a plan it should decide whether:
+
+- to **validate** the resources declared in it
+- to **apply** the resources declared in it
+- to **destroy** all the resources declared in it
+
+In order to be able to decide, StateIT should store the state of the resources each time it executes the same plan.
+That state is stored as JSON. It stores the list of the resources applied by the plan execution.
+
+[source, json]
+.state.json
+----
+[
+    {
+        "id": "resource-id", <1>
+        "type": "qualified.type.class.of.Resource1", <2>
+        "props": { <3>
+           "property1": "value",
+           "property2": "value"
+        }
+    }
+]
+----
+
+<1> ID of the resource
+<2> qualified class name of the resource
+<3> the properties used to build the state of the resource
+
+This JSON file can be stored in any type of storage. In order to be able to store the plan execution, the plan
+file should declare which type of state storage is going to use:
+
+[source, groovy]
+.file state provider
+----
+state {
+  provider = fileState('/path/to/state.json') // <1>
+}
+----
+
+<1> Declares a local file where the stage will be stored
 
 === Dependency
 
-TODO
+A given resource could depend on another resource. When declaring a resource you can assign the resource
+to a variable and then use the resource output properties in another resource.
+
+[source, groovy]
+.dependency
+----
+def res1 = resource1('id-resource1') { // <1>
+   property = "value"
+}
+
+resource2('id-resource2') {
+   property = res1.x // <2>
+}
+----
+
+<1> assign resource to a variable to be able to use it in another resource
+<2> resource2 depends on x property from resource1

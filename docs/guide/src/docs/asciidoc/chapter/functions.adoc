@@ -9,16 +9,28 @@ Date functions help to create dates for different tasks (e.g. generate a file na
 
 ==== now()
 
-TODO
-
-==== now(pattern)
-
-TODO
+This function converts a given date to a string using the ISO-8601 ("yyyy-MM-dd'T'HH:mm:ssZ")
 
 [source, groovy]
 .now(pattern)
 ----
 directory('todays-backup') {
-  path  = "/backups/${now('yyyy-MM-dd')}"
+  path  = "/backups/${now()}" <1>
 }
 ----
+
+<1> path will become **/backups/2022-12-31'T'10:00:00Z**
+
+==== now(pattern)
+
+This function converts a given date to a string following the pattern passed as an argument.
+
+[source, groovy]
+.now(pattern)
+----
+directory('todays-backup') {
+  path  = "/backups/${now('yyyy-MM-dd')}" <1>
+}
+----
+
+<1> will become for example **2022-12-31**
