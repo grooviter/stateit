@@ -51,11 +51,12 @@ class PlanExecutor {
             .find { it.isFailure() }
 
         if (failed) {
-            log.info "validation failed!"
+            log.info "VALIDATION FAILED!"
             log.info "resource: ${failed.context.id} - error: ${failed.error.code}"
             return Result.error(plan, failed.error)
         }
 
+        log.info "VALIDATION SUCCEEDED!"
         return Result.of(plan)
     }
 
