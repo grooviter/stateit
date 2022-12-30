@@ -1,8 +1,8 @@
 package com.github.grooviter.stateit.cli
 
-import com.github.grooviter.stateit.core.PlanExecutor
 import picocli.CommandLine
 import java.util.concurrent.Callable
+import static com.github.grooviter.stateit.DSL.validate
 
 @CommandLine.Command(name = "validate", description = "validates resources declared in the plan")
 class ValidateCommand implements Callable<Integer>, PlanLoader {
@@ -11,6 +11,6 @@ class ValidateCommand implements Callable<Integer>, PlanLoader {
 
     @Override
     Integer call() throws Exception {
-        return new PlanExecutor(loadPlan(entrypoint.plan)).validate().isSuccess() ? 0 : 1
+        return evaluateCommandExit(validate(loadPlan(entrypoint.plan, entrypoint.varFile)))
     }
 }

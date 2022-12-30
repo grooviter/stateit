@@ -12,6 +12,6 @@ class ExecuteCommand implements Callable<Integer>, PlanLoader {
 
     @Override
     Integer call() throws Exception {
-        return evaluateCommandExit(execute(loadPlan(entrypoint.plan)))
+        return evaluateCommandExit(execute(loadPlan(entrypoint.plan, entrypoint.varFile)))
     }
 }

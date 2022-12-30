@@ -9,7 +9,7 @@ class FileResolver implements VariablesLoaderResolver {
 
     @Override
     Variables load() {
-        if (!variableFile.exists()) {
+        if (!variableFile?.exists()) {
             return new Variables()
         }
 

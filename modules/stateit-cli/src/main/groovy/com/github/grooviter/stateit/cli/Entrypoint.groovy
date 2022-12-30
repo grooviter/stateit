@@ -6,8 +6,11 @@ import java.util.concurrent.Callable
 
 @CommandLine.Command(subcommands = [ValidateCommand, ExecuteCommand, DestroyCommand])
 class Entrypoint implements Callable<Integer> {
-    @CommandLine.Option(names = ["--plan"], description = "Stateit Plan", required = true)
-    String plan
+    @CommandLine.Option(names = ["--plan"], description = "StateIT Plan", required = true)
+    File plan
+
+    @CommandLine.Option(names = ["--var-file"], description = "StateIT variable file")
+    File varFile
 
     Integer call() throws Exception {}
 

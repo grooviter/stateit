@@ -13,6 +13,6 @@ class DestroyCommand implements Callable<Integer>, PlanLoader {
 
     @Override
     Integer call() throws Exception {
-        return evaluateCommandExit(destroy(loadPlan(entrypoint.plan)))
+        return evaluateCommandExit(destroy(loadPlan(entrypoint.plan, entrypoint.varFile)))
     }
 }

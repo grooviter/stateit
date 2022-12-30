@@ -3,12 +3,14 @@ package com.github.grooviter.stateit.cli
 import com.github.grooviter.stateit.DSL
 import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.core.Result
+import com.github.grooviter.stateit.core.variables.FileResolver
+import com.github.grooviter.stateit.core.variables.VariablesLoader
 
 trait PlanLoader {
-    static Plan loadPlan(String path) {
-        GroovyShell shell = new GroovyShell(new Binding([DSL: DSL]))
-        File scriptFile = new File(path)
-        String scriptText = "DSL.stateit { ${scriptFile.text } }"
+    static Plan loadPlan(File scriptFile, File varFile) {
+        VariablesLoader loader = new VariablesLoader([new FileResolver(varFile)])
+        GroovyShell shell = new GroovyShell(new Binding([DSL: DSL, loader: loader]))
+        String scriptText = "DSL.stateit(loader) { ${scriptFile.text } }"
         return shell.evaluate(scriptText) as Plan
     }
 
