@@ -4,7 +4,7 @@ import com.github.grooviter.stateit.core.PlanExecutor
 import picocli.CommandLine
 import java.util.concurrent.Callable
 
-@CommandLine.Command(name = "validate")
+@CommandLine.Command(name = "validate", description = "validates resources declared in the plan")
 class ValidateCommand implements Callable<Integer>, PlanLoader {
     @CommandLine.ParentCommand()
     Entrypoint entrypoint

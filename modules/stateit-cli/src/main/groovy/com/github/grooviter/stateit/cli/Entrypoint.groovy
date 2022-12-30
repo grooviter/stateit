@@ -4,7 +4,7 @@ import picocli.CommandLine
 
 import java.util.concurrent.Callable
 
-@CommandLine.Command(subcommands = [ValidateCommand, ExecuteCommand])
+@CommandLine.Command(subcommands = [ValidateCommand, ExecuteCommand, DestroyCommand])
 class Entrypoint implements Callable<Integer> {
     @CommandLine.Option(names = ["--plan"], description = "Stateit Plan", required = true)
     String plan
