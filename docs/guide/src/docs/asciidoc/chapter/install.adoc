@@ -1,0 +1,3 @@
+== Installation
+
+You can execute StateIT with a standalone CLI so that you can execute it any time from your terminal.

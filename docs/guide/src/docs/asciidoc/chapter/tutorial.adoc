@@ -1,0 +1,98 @@
+== Tutorial
+
+StateIT executes plans representing resource states. When a plan is executed StateIT stores its state so that it knows
+when a given resource has been applied successfully and there is no need to execute it again.
+
+=== validate
+
+The following plan file shows a resource representing a local filesystem directory (/tmp/sample-dir). It also shows that the
+execution state will be stored in a file at /tmp/state.json.
+
+[source, groovy]
+.plan.st
+----
+directory("sample-dir") {
+  path = "/tmp/sample-dir"
+}
+
+state {
+   provider = fileState("/tmp/state.json")
+}
+----
+
+Although we know it's properly configured lets
+
+[source, text]
+.validate
+----
+stateit --plan plan.st validate
+----
+
+Which outputs:
+
+```
+[stateit] - 03:12:21.538 - validating resources to apply
+[stateit] - 03:12:21.542 - TO APPLY:     1
+[stateit] - 03:12:21.542 - TO REMOVE:    0
+[stateit] - 03:12:21.546 - VALIDATION SUCCEEDED!
+```
+
+It seems that the plan is ok and that 1 resource will be applied in case you carry on and execute the plan.
+
+=== apply
+
+In that case
+execute:
+
+[source, text]
+.execute
+----
+stateit --plan plan.st execute
+----
+
+What it does is:
+
+- checks that a previous state exists
+- shows how many resources will apply or which will destroy
+- show the resources removed/applied
+- saves the state once the execution has finished
+
+```
+[stateit] - 03:16:30.272 - state file found... loading resources
+[stateit] - 03:16:30.297 - TO APPLY:     1
+[stateit] - 03:16:30.297 - TO REMOVE:    0
+[stateit] - 03:16:30.297 - create sample-dir
+[stateit] - 03:16:30.301 - saving state
+```
+
+You can check that the task created a directory. Now if you execute the same script one more time, you'll realize that the script doesn't execute anything:
+
+```
+[stateit] - 03:16:56.022 - state file found... loading resources
+[stateit] - 03:16:56.050 - TO APPLY:     0
+[stateit] - 03:16:56.050 - TO REMOVE:    0
+[stateit] - 03:16:56.051 - saving state
+```
+
+That's because the state stored in the `/tmp/state.json` path has registered the state of the script,
+and it knows that the resource have been already applied.
+
+=== destroy
+
+Finally if we'd like to remove all applied resources we can execute the **destroy** command:
+
+[source, text]
+.destroy
+----
+stateit --plan plan.st destroy
+----
+
+This will destroy all resources declared in the plan:
+
+```
+[stateit] - 03:26:09.109 - state file found... loading resources
+[stateit] - 03:26:09.135 - destroying all resources apply
+[stateit] - 03:26:09.135 - deleting ALL (1) resources
+[stateit] - 03:26:09.136 - destroy sample-dir
+[stateit] - 03:26:09.137 - saving state
+```
