@@ -37,7 +37,7 @@ class FileStateProvider implements StateProvider {
 
         if (!jsonFile.exists()) {
             log.info "state file not found"
-            return Result.error(new Error("stateit.files.state.file_not_found", "no state file found", "EXECUTION"))
+            return Result.of(Plan.empty())
         }
 
         log.info "state file found... loading resources"

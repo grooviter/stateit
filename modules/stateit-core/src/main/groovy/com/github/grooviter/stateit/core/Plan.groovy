@@ -23,4 +23,8 @@ class Plan {
     private List<Resource> intersection() {
         return resourcesDeclared.intersect(resourcesInState)
     }
+
+    static Plan empty() {
+        return builder().resourcesInState([]).resourcesDeclared([]).build()
+    }
 }
