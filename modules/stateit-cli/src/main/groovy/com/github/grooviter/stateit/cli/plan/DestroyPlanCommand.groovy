@@ -1,5 +1,7 @@
-package com.github.grooviter.stateit.cli
+package com.github.grooviter.stateit.cli.plan
 
+import com.github.grooviter.stateit.cli.ExitResultEvaluator
+import com.github.grooviter.stateit.cli.Entrypoint
 import picocli.CommandLine
 
 import java.util.concurrent.Callable
@@ -7,12 +9,12 @@ import java.util.concurrent.Callable
 import static com.github.grooviter.stateit.DSL.destroy
 
 @CommandLine.Command(name = "destroy", description = "destroys all resources declared in plan")
-class DestroyCommand implements Callable<Integer>, PlanLoader {
+class DestroyPlanCommand implements Callable<Integer>, PlanLoader, ExitResultEvaluator  {
     @CommandLine.ParentCommand
     Entrypoint entrypoint
 
     @Override
     Integer call() throws Exception {
-        return evaluateCommandExit(destroy(loadPlan(entrypoint.plan, entrypoint.varFile)))
+        return evalExitResult(destroy(loadPlan(entrypoint.plan, entrypoint.varFile)))
     }
 }

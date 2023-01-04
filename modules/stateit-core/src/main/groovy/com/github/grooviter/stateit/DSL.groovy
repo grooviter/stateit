@@ -63,6 +63,21 @@ class DSL {
         return applyPropsToClosure(new DSL(variablesLoader.load()), closure)
     }
 
+    static Plan stateit(File planFile, File variableFile) {
+        DSL dsl = dsl(planFile, variableFile)
+        Result<Plan> statePlan = dsl.stateProvider?.load() ?: Result.of(Plan.empty())
+
+        if (statePlan.failure) {
+            return statePlan.context
+        }
+
+        return Plan.builder()
+                .stateProvider(dsl.stateProvider)
+                .resourcesDeclared(dsl.declaredResources)
+                .resourcesInState(statePlan.context.resourcesInState)
+                .build()
+    }
+
     static Plan stateit(VariablesLoader variablesLoader, @DelegatesTo(DSL) Closure closure) {
         DSL dsl = applyPropsToClosure(new DSL(variablesLoader.load()), closure)
         Result<Plan> statePlan = dsl.stateProvider?.load() ?: Result.of(Plan.empty())
