@@ -33,4 +33,4 @@ directory('todays-backup') {
 }
 ----
 
-<1> will become for example **2022-12-31**
+<1> path will become **/backups/2022-12-31**

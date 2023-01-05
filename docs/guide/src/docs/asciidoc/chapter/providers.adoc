@@ -12,10 +12,8 @@ The **Files** provider provides a way of handling a plan state via a local file.
 
 [source, groovy]
 ----
-stateit {
-    state {
-        implementation = file('/tmp/mystate.json')
-    }
+state {
+    implementation = file('/tmp/mystate.json')
 }
 ----
 
@@ -119,14 +117,12 @@ export STATEIT_GITHUB_TOKEN="token"
 
 [source, groovy]
 ----
-stateit {
-   state {
-      implementation = github {
-         repository = "myorg/myrepository"
-         file       = "mystate.json"
-         branch     = "main"
-      }
-   }
+state {
+  implementation = github {
+     repository = "myorg/myrepository"
+     file       = "mystate.json"
+     branch     = "main"
+  }
 }
 ----
 

@@ -48,6 +48,28 @@ resource1('id-of-the-resource') {  // <1>
 <1> ID
 <2> properties
 
+=== Catalog
+
+A catalog is a set of plan files in the same directory sharing the same state provider.
+
+
+[source, text]
+----
++-catalog-dir
+      +
+      |
+      +-- plan1.st
+      |
+      +-- plan2.st
+      |
+      +-- stateit.state.json
+      |
+      +-- stateit.vars.toml
+----
+
+WARNING: If StateIT detects more than one state provider, it will stop trying to execute the catalog,
+and it will show an error.
+
 === State
 
 When StateIT executes a plan it should decide whether:

@@ -80,3 +80,5 @@ The secret should be declared in the **stateit.vars.toml** file in the **secrets
 github_username=username
 github_token=token
 ----
+
+IMPORTANT: Secrets are not stored in the resource state
