@@ -5,7 +5,7 @@ import com.github.grooviter.stateit.core.Result
 import spock.lang.IgnoreIf
 import spock.lang.Specification
 
-import static com.github.grooviter.stateit.DSL.stateit
+import static com.github.grooviter.stateit.DSL.plan
 import static com.github.grooviter.stateit.DSL.validate
 import static com.github.grooviter.stateit.DSL.execute
 import static com.github.grooviter.stateit.DSL.destroy
@@ -14,7 +14,7 @@ import static com.github.grooviter.stateit.github.common.CredentialsResolver.res
 class RepositoryDSLSpec extends Specification {
     void 'validating a repository fails when missing its name'() {
         when:
-        Result<Plan> result = validate stateit {
+        Result<Plan> result = validate plan {
             github_repository("shine/hope") {
                 owner = "shine"
             }
@@ -29,7 +29,7 @@ class RepositoryDSLSpec extends Specification {
 
     void 'validating a repository fails when missing its owner'() {
         when:
-        Result<Plan> result = validate stateit {
+        Result<Plan> result = validate plan {
             github_repository("shine/hope") {
                 name  = "hope"
             }
@@ -45,7 +45,7 @@ class RepositoryDSLSpec extends Specification {
     @IgnoreIf({ resolveCredentials().success })
     void 'validating a repository fails when missing credentials'() {
         when:
-        Result<Plan> result = validate stateit {
+        Result<Plan> result = validate plan {
             github_repository("shine/hope") {
                 owner = "shine"
                 name  = "hope"
@@ -62,7 +62,7 @@ class RepositoryDSLSpec extends Specification {
     @IgnoreIf({ resolveCredentials().failure })
     void 'validating a repository succeeds'() {
         when:
-        Result<Plan> result = validate stateit {
+        Result<Plan> result = validate plan {
             github_repository("shine/hope") {
                 owner = "shine"
                 name  = "hope"
@@ -76,7 +76,7 @@ class RepositoryDSLSpec extends Specification {
     @IgnoreIf({ resolveCredentials().failure })
     void 'create a repository succeeds'() {
         given:
-        Plan plan = stateit {
+        Plan plan = plan {
             def org = github_organization("@shine"){
                 name = "shine";
                 type = "open-source"

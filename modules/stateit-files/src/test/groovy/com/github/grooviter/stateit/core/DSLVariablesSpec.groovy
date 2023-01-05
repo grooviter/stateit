@@ -6,7 +6,7 @@ import com.github.grooviter.stateit.testing.FileUtilsAware
 import spock.lang.Specification
 
 import static com.github.grooviter.stateit.DSL.execute
-import static com.github.grooviter.stateit.DSL.stateit
+import static com.github.grooviter.stateit.DSL.plan
 
 class DSLVariablesSpec extends Specification implements FileUtilsAware {
     void 'resolve variables in DSL'() {
@@ -19,7 +19,7 @@ class DSLVariablesSpec extends Specification implements FileUtilsAware {
         VariablesLoader loader = new VariablesLoader([new FileResolver(variablesFile)])
 
         when:
-        Result<Plan> result = execute stateit(loader) {
+        Result<Plan> result = execute plan(loader) {
             directory("my-directory") {
                 path = var_.my_directory_path
             }

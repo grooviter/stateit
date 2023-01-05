@@ -10,7 +10,7 @@ class PlanExecutorSpec extends Specification implements FileUtilsAware {
     void 'executing a plan successfully'() {
         given:
         File dest = new File("/tmp/kk1")
-        Plan plan = DSL.stateit {
+        Plan plan = DSL.plan {
             directory("garbage") {
                 path = dest.absolutePath
             }
@@ -33,7 +33,7 @@ class PlanExecutorSpec extends Specification implements FileUtilsAware {
     void 'executing a wrong plan stops execution'() {
         given:
         File dest = new File("/notallowed")
-        Plan plan = DSL.stateit {
+        Plan plan = DSL.plan {
             directory("garbage") {
                 path = dest.absolutePath
             }
@@ -53,7 +53,7 @@ class PlanExecutorSpec extends Specification implements FileUtilsAware {
     void 'executing a wrong plan returns error info'() {
         given:
         File dest = new File("/notallowed")
-        Plan plan = DSL.stateit {
+        Plan plan = DSL.plan {
             directory("garbage") {
                 path = dest.absolutePath
             }
@@ -72,7 +72,7 @@ class PlanExecutorSpec extends Specification implements FileUtilsAware {
         File notAllowed = new File("/notallowed")
         File yesAllowed = new File("/tmp/kk3")
 
-        Plan plan = DSL.stateit {
+        Plan plan = DSL.plan {
             directory("treasure") {
                 path = yesAllowed.absolutePath
             }
@@ -105,7 +105,7 @@ class PlanExecutorSpec extends Specification implements FileUtilsAware {
         File yesAllowed = new File("/tmp/kk3")
         File stateFile = new File("/tmp/state.json")
 
-        Plan plan = DSL.stateit {
+        Plan plan = DSL.plan {
             directory("treasure") {
                 path = yesAllowed.absolutePath
             }

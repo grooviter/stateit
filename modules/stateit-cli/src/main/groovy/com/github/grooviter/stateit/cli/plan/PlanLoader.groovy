@@ -5,6 +5,6 @@ import com.github.grooviter.stateit.core.Plan
 
 trait PlanLoader {
     static Plan loadPlan(File scriptFile, File varFile) {
-        return DSL.stateit(scriptFile, varFile)
+        return DSL.plan(scriptFile, varFile)
     }
 }

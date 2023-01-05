@@ -5,7 +5,7 @@ import com.github.grooviter.stateit.core.Result
 import com.github.grooviter.stateit.testing.FileUtilsAware
 import spock.lang.Specification
 
-import static com.github.grooviter.stateit.DSL.stateit
+import static com.github.grooviter.stateit.DSL.plan
 import static com.github.grooviter.stateit.DSL.execute
 
 class TargzDSLSpec extends Specification implements FileUtilsAware {
@@ -15,7 +15,7 @@ class TargzDSLSpec extends Specification implements FileUtilsAware {
         File compressed = file("/tmp/test-dir.tar.gz")
 
         when:
-        Result<Plan> result = execute stateit {
+        Result<Plan> result = execute plan {
             targz("test-dir-gzip") {
                 input  = uncompressed.absolutePath
                 output = compressed.absolutePath
@@ -40,7 +40,7 @@ class TargzDSLSpec extends Specification implements FileUtilsAware {
         File uncompressed = file("/tmp/uncompressed")
 
         when:
-        Result<Plan> result = execute stateit {
+        Result<Plan> result = execute plan {
             targz("test-dir-gzip") {
                 input  = compressed.absolutePath
                 output = uncompressed.absolutePath
@@ -74,7 +74,7 @@ class TargzDSLSpec extends Specification implements FileUtilsAware {
         File stateFile = file("/tmp/superstate.json")
 
         when:
-        Result<Plan> result = execute stateit {
+        Result<Plan> result = execute plan {
             def uncompressed = directory("id-data") {
                 path = uncompressedDir.absolutePath
             }

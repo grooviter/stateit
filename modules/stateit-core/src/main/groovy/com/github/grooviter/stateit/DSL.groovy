@@ -63,7 +63,7 @@ class DSL {
         return applyPropsToClosure(new DSL(variablesLoader.load()), closure)
     }
 
-    static Plan stateit(File planFile, File variableFile) {
+    static Plan plan(File planFile, File variableFile) {
         DSL dsl = dsl(planFile, variableFile)
         Result<Plan> statePlan = dsl.stateProvider?.load() ?: Result.of(Plan.empty())
 
@@ -78,7 +78,7 @@ class DSL {
                 .build()
     }
 
-    static Plan stateit(VariablesLoader variablesLoader, @DelegatesTo(DSL) Closure closure) {
+    static Plan plan(VariablesLoader variablesLoader, @DelegatesTo(DSL) Closure closure) {
         DSL dsl = applyPropsToClosure(new DSL(variablesLoader.load()), closure)
         Result<Plan> statePlan = dsl.stateProvider?.load() ?: Result.of(Plan.empty())
 
@@ -93,8 +93,8 @@ class DSL {
                 .build()
     }
 
-    static Plan stateit(@DelegatesTo(DSL) Closure closure) {
-        return stateit(new VariablesLoader(), closure)
+    static Plan plan(@DelegatesTo(DSL) Closure closure) {
+        return plan(new VariablesLoader(), closure)
     }
 
     Result<DSL> merge(DSL another) {

@@ -6,14 +6,14 @@ import com.github.grooviter.stateit.testing.FileUtilsAware
 import groovy.json.JsonOutput
 import spock.lang.Specification
 
-import static com.github.grooviter.stateit.DSL.stateit
+import static com.github.grooviter.stateit.DSL.plan
 import static com.github.grooviter.stateit.DSL.validate
 import static com.github.grooviter.stateit.DSL.destroy
 
 class MkdirDSLSpec extends Specification implements FileUtilsAware {
     void 'declaring one resource successfully'() {
         when:
-        Plan plan = stateit {
+        Plan plan = plan {
             directory("backup-directory") {
                 path = "/tmp/backup"
             }
@@ -25,7 +25,7 @@ class MkdirDSLSpec extends Specification implements FileUtilsAware {
 
     void 'declaring more than one resources successfully'() {
         when:
-        Plan plan = stateit {
+        Plan plan = plan {
             directory("one-directory") {
                 path = "/tmp/one"
             }
@@ -41,7 +41,7 @@ class MkdirDSLSpec extends Specification implements FileUtilsAware {
 
     void 'declaring a directory without name should fail'() {
         when:
-        Result<Plan> validationResult = validate stateit {
+        Result<Plan> validationResult = validate plan {
             directory("one-directory") {}
         }
 
@@ -75,7 +75,7 @@ class MkdirDSLSpec extends Specification implements FileUtilsAware {
         ])
 
         when:
-        Plan plan = stateit {
+        Plan plan = plan {
             directory("applied-id") {
                 path = myDir.absolutePath
             }
@@ -111,7 +111,7 @@ class MkdirDSLSpec extends Specification implements FileUtilsAware {
         ])
 
         and:
-        Plan plan = stateit {
+        Plan plan = plan {
             directory("applied-id") {
                 path = myDir.absolutePath
             }
