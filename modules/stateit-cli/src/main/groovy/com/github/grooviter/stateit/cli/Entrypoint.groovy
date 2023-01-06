@@ -1,25 +1,33 @@
 package com.github.grooviter.stateit.cli
 
-import com.github.grooviter.stateit.cli.catalog.ApplyCatalogCommand
-import com.github.grooviter.stateit.cli.catalog.ValidateCatalogCommand
-import com.github.grooviter.stateit.cli.plan.DestroyPlanCommand
-import com.github.grooviter.stateit.cli.plan.ApplyPlanCommand
-import com.github.grooviter.stateit.cli.plan.ValidatePlanCommand
+import com.github.grooviter.stateit.cli.catalog.CatalogApplyCommand
+import com.github.grooviter.stateit.cli.catalog.CatalogDestroyCommand
+import com.github.grooviter.stateit.cli.catalog.CatalogValidateCommand
+import com.github.grooviter.stateit.cli.plan.PlanDestroyCommand
+import com.github.grooviter.stateit.cli.plan.PlanApplyCommand
+import com.github.grooviter.stateit.cli.plan.PlanValidateCommand
 import picocli.CommandLine
 
 import java.util.concurrent.Callable
 
-@CommandLine.Command(subcommands = [
-    ValidatePlanCommand, ApplyPlanCommand, DestroyPlanCommand, ValidateCatalogCommand, ApplyCatalogCommand
-])
+@CommandLine.Command(
+    name = "stateit",
+    subcommands = [
+        CatalogValidateCommand,
+        CatalogApplyCommand,
+        CatalogDestroyCommand,
+        PlanValidateCommand,
+        PlanApplyCommand,
+        PlanDestroyCommand
+    ])
 class Entrypoint implements Callable<Integer> {
-    @CommandLine.Option(names = ["--plan"], description = "StateIT Plan")
-    File plan
+    @CommandLine.Option(names = ["-V", "--version"], versionHelp = true, description = "display version info")
+    boolean versionInfoRequested
 
-    @CommandLine.Option(names = ["--catalog"], description = "StateIT Catalog")
-    File catalog
+    @CommandLine.Option(names = ["-h", "--help"], usageHelp = true, description = "display this help message")
+    boolean usageHelpRequested
 
-    @CommandLine.Option(names = ["--var-file"], description = "StateIT variable file")
+    @CommandLine.Option(names = ["--var-file"], description = "variable file")
     File varFile
 
     Integer call() throws Exception {}

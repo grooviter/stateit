@@ -10,16 +10,21 @@ configurations {
 dependencies {
     implementation project(":stateit-files")
     implementation project(":stateit-github")
-    implementation "org.apache.groovy:groovy:$groovy"
-    implementation "org.apache.groovy:groovy-json:$groovy"
-    implementation "info.picocli:picocli-groovy:$picocli"
+    implementation("org.apache.groovy:groovy-json:$groovy")
+    implementation("ch.qos.logback:logback-core:$logback")
+    implementation("ch.qos.logback:logback-classic:$logback")
+    implementation("info.picocli:picocli-groovy:$picocli") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
 
-    implementation "ch.qos.logback:logback-core:$logback"
-    implementation "ch.qos.logback:logback-classic:$logback"
-
-    groovydocs "org.apache.groovy:groovy-all:$groovy"
+    groovydocs("org.apache.groovy:groovy-all:$groovy")
 }
 
 application {
     mainClassName("com.github.grooviter.stateit.cli.Entrypoint")
+    applicationName("stateit")
+}
+
+groovydoc {
+    groovyClasspath = classpath + configurations.groovydocs
 }

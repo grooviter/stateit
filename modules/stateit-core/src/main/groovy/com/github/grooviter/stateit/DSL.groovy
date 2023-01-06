@@ -27,7 +27,7 @@ class DSL {
         return new PlanExecutor(plan).validate()
     }
 
-    static Result<Plan> execute(Plan plan) {
+    static Result<Plan> apply(Plan plan) {
         return new PlanExecutor(plan).execute()
     }
 

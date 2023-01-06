@@ -8,13 +8,13 @@ import java.util.concurrent.Callable
 
 import static com.github.grooviter.stateit.DSL.destroy
 
-@CommandLine.Command(name = "destroy", description = "destroys all resources declared in plan")
-class DestroyPlanCommand implements Callable<Integer>, PlanLoader, ExitResultEvaluator  {
+@CommandLine.Command(name = "destroy-plan", description = "destroys all resources declared in plan", aliases = ["dp"])
+class PlanDestroyCommand extends PlanCommand implements Callable<Integer>, PlanLoader, ExitResultEvaluator  {
     @CommandLine.ParentCommand
     Entrypoint entrypoint
 
     @Override
     Integer call() throws Exception {
-        return evalExitResult(destroy(loadPlan(entrypoint.plan, entrypoint.varFile)))
+        return evalExitResult(destroy(loadPlan(plan, entrypoint.varFile)))
     }
 }

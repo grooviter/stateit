@@ -7,13 +7,17 @@ import picocli.CommandLine
 
 import java.util.concurrent.Callable
 
-@CommandLine.Command(name = "apply", description = "apply resources contained in the catalog")
-class ApplyCatalogCommand implements Callable<Integer>, CatalogLoader, ExitResultEvaluator {
+@CommandLine.Command(
+        name = "apply",
+        description = "apply resources contained in the catalog",
+        aliases = ["ac", "apply-catalog"]
+)
+class CatalogApplyCommand extends CatalogCommand implements Callable<Integer>, CatalogLoader, ExitResultEvaluator {
     @CommandLine.ParentCommand()
     Entrypoint entrypoint
 
     @Override
     Integer call() throws Exception {
-        return evalExitResult(loadCatalog(entrypoint.catalog, entrypoint.varFile).flatMap(DSL::execute))
+        return evalExitResult(loadCatalog(catalog, entrypoint.varFile).flatMap(DSL::apply))
     }
 }

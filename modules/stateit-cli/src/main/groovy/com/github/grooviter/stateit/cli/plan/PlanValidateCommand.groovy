@@ -6,13 +6,13 @@ import picocli.CommandLine
 import java.util.concurrent.Callable
 import static com.github.grooviter.stateit.DSL.validate
 
-@CommandLine.Command(name = "validate", description = "validates resources declared in the plan")
-class ValidatePlanCommand implements Callable<Integer>, PlanLoader, ExitResultEvaluator  {
+@CommandLine.Command(name = "validate-plan", description = "validates resources declared in the plan", aliases = ["vp"])
+class PlanValidateCommand extends PlanCommand implements Callable<Integer>, PlanLoader, ExitResultEvaluator  {
     @CommandLine.ParentCommand()
     Entrypoint entrypoint
 
     @Override
     Integer call() throws Exception {
-        return evalExitResult(validate(loadPlan(entrypoint.plan, entrypoint.varFile)))
+        return evalExitResult(validate(loadPlan(plan, entrypoint.varFile)))
     }
 }

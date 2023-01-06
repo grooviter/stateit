@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 import static com.github.grooviter.stateit.DSL.plan
 import static com.github.grooviter.stateit.DSL.validate
-import static com.github.grooviter.stateit.DSL.execute
+import static com.github.grooviter.stateit.DSL.apply
 import static com.github.grooviter.stateit.DSL.destroy
 import static com.github.grooviter.stateit.github.common.CredentialsResolver.resolveCredentials
 
@@ -118,7 +118,7 @@ class RepositoryDSLSpec extends Specification {
         }
 
         expect:
-        execute plan isSuccess()
+        apply plan isSuccess()
 
         cleanup:
         destroy plan
