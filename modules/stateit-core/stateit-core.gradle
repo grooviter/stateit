@@ -14,6 +14,7 @@ dependencies {
     api "org.apache.groovy:groovy-dateutil:$groovy"
 
     implementation "org.slf4j:slf4j-api:$slf4j"
+    implementation 'org.apache.commons:commons-compress:1.22'
     implementation "ch.qos.logback:logback-core:$logback"
     implementation "ch.qos.logback:logback-classic:$logback"
 

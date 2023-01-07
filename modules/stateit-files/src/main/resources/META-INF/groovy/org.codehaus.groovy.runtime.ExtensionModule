@@ -1,3 +1,0 @@
-moduleName=Stateit DSL Files Extension Module
-moduleVersion=1.0.0
-extensionClasses=com.github.grooviter.stateit.files.DSLExtensionModule,com.github.grooviter.stateit.files.StateExtensionModule

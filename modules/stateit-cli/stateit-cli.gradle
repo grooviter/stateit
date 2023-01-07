@@ -8,7 +8,6 @@ configurations {
 }
 
 dependencies {
-    implementation project(":stateit-files")
     implementation project(":stateit-github")
     implementation("org.apache.groovy:groovy-json:$groovy")
     implementation("ch.qos.logback:logback-core:$logback")
