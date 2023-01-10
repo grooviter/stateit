@@ -1,18 +1,17 @@
 plugins {
     id 'groovy'
     id "com.bertramlabs.asset-pipeline" version "3.4.4"
+    id 'org.ajoberstar.git-publish'
 }
 
 dependencies {
+    assets('org.groocss:groocss:1.0-M4-groovy2.5')
     assets "com.bertramlabs.plugins:asset-pipeline-core:$assets_pipeline"
     assets "com.bertramlabs.plugins:jsx-asset-pipeline:$assets_pipeline"
     assets "com.bertramlabs.plugins:typescript-asset-pipeline:$assets_pipeline"
     assets("com.bertramlabs.plugins:groocss-asset-pipeline:$assets_pipeline") {
         exclude module: 'groocss'
     }
-
-    //assets('com.github.grooviter:groocss:1.0.0')
-    assets('org.groocss:groocss:1.0-M4-groovy2.5')
 }
 
 assets {
@@ -24,20 +23,30 @@ assets {
     configOptions = [
         commonJs: true,
         enableES6: false,
-        groocss: [
-            prettyPrint: true,
-            compress: false,
-            noExts: false,
-            convertUnderline: false
-        ]
+        groocss: [prettyPrint: true, compress: false, noExts: false, convertUnderline: false]
     ]
 
-    excludes = [
-        'components/*',
-        'react*.js',
-        'layout/*',
-        'custom/*.css',
-        'origins/*',
-        'fonts/*'
-    ]
+    excludes = ['origins/*', 'fonts/*']
 }
+
+task generateSite {
+    dependsOn("clean", ":stateit-core:groovydoc", ":guide:asciidoctor", ":website:assetClean", ":website:assetCompile")
+    doLast {
+        copy {
+            from "$rootDir/docs/guide/build/docs/asciidoc"
+            into "$rootDir/docs/website/build/assets/guide"
+        }
+        copy {
+            from "$rootDir/modules/stateit-core/build/docs/groovydoc"
+            into "$rootDir/docs/website/build/assets/api"
+        }
+    }
+}
+
+task setAuthentication(dependsOn: 'generateSite') {
+    doLast {
+        System.setProperty('org.ajoberstar.grgit.auth.username', findProperty('PUBLISH_GH_TOKEN'))
+    }
+}
+
+gitPublishPush.dependsOn(['setAuthentication'])

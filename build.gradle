@@ -141,6 +141,23 @@ jreleaser {
   deploy {
     maven { active = 'NEVER' }
   }
+  assemble {
+    active = 'ALWAYS'
+  }
+  distributions {
+    app {
+      active           = 'ALWAYS'
+      distributionType = 'JAVA_BINARY'
+      stereotype       = 'CLI'
+      tags             = ['cli', 'stateit']
+      executable {
+        name = 'stateit'
+      }
+      artifact {
+        path = "modules/stateit-cli/build/distributions/stateit-${version}.zip"
+      }
+    }
+  }
 }
 
 allprojects {
@@ -165,23 +182,25 @@ subprojects {
   })
 }
 
-task generateSite {
-  dependsOn("clean", ":stateit-core:groovydoc", ":guide:asciidoctor", ":website:assetClean", ":website:assetCompile")
-  doLast {
-    copy {
-      from "$rootDir/docs/guide/build/docs/asciidoc"
-      into "$rootDir/docs/website/build/assets/guide"
-    }
-    copy {
-      from "$rootDir/modules/stateit-core/build/docs/groovydoc"
-      into "$rootDir/docs/website/build/assets/api"
-    }
-  }
+static List<String> snapshots() {
+  return [
+      ':stateit-core:publishAllPublicationsToSnapshotsRepository',
+      ':stateit-github:publishAllPublicationsToSnapshotsRepository',
+      ':guide:gitPublishPush',
+      'jreleaserRelease'
+  ]
+}
+
+static List<String> releases() {
+  return [
+      ':stateit-core:publish',
+      ':stateit-github:publish',
+      ':guide:gitPublishPush',
+      'jreleaserFullRelease'
+  ]
 }
 
 task release() {
-  dependsOn(version.endsWith('SNAPSHOT')
-    ? [':gql-core:publishAllPublicationsToSnapshotsRepository', ':gql-ratpack:publishAllPublicationsToSnapshotsRepository', 'jreleaserRelease']
-    : [':gql-core:publish', 'gql-ratpack:publish', ':guide:gitPublishPush', 'jreleaserFullRelease'])
+  dependsOn(version.endsWith('SNAPSHOT') ? snapshots() : releases())
 }
 
