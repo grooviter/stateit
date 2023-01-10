@@ -62,11 +62,6 @@ config {
     }
   }
   docs {
-    guide {
-      publish {
-        enabled = true
-      }
-    }
     sourceHtml {
       enabled = false
       aggregate {
@@ -186,7 +181,7 @@ static List<String> snapshots() {
   return [
       ':stateit-core:publishAllPublicationsToSnapshotsRepository',
       ':stateit-github:publishAllPublicationsToSnapshotsRepository',
-      ':guide:gitPublishPush',
+      ':website:gitPublishPush',
       'jreleaserRelease'
   ]
 }
@@ -195,7 +190,7 @@ static List<String> releases() {
   return [
       ':stateit-core:publish',
       ':stateit-github:publish',
-      ':guide:gitPublishPush',
+      ':website:gitPublishPush',
       'jreleaserFullRelease'
   ]
 }

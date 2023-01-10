@@ -29,6 +29,22 @@ assets {
     excludes = ['origins/*', 'fonts/*']
 }
 
+gitPublish {
+    repoUri       = 'https://github.com/grooviter/stateit.git'
+    branch        = 'gh-pages'
+    commitMessage = "Released version $version"
+
+    contents {
+        from file('build/assets')
+        duplicatesStrategy DuplicatesStrategy.INCLUDE
+    }
+}
+
+gitPublishPush {
+    dependsOn 'setAuthentication'
+    dependsOn 'generateSite'
+}
+
 task generateSite {
     dependsOn("clean", ":stateit-core:groovydoc", ":guide:asciidoctor", ":website:assetClean", ":website:assetCompile")
     doLast {
@@ -48,5 +64,3 @@ task setAuthentication(dependsOn: 'generateSite') {
         System.setProperty('org.ajoberstar.grgit.auth.username', findProperty('PUBLISH_GH_TOKEN'))
     }
 }
-
-gitPublishPush.dependsOn(['setAuthentication'])
