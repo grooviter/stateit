@@ -145,6 +145,7 @@ jreleaser {
 
 allprojects {
   repositories {
+    jcenter()
     mavenCentral()
   }
 }

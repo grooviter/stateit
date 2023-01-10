@@ -1,0 +1,18 @@
+// BLACK
+_.'bg-black' { backgroundColor '#000'}
+// GRAY
+_.'bg-secondary-100' { backgroundColor '#EFEFEF' }
+_.'bg-secondary-200' { backgroundColor '#CCCCCC' }
+_.'bg-secondary-300' { backgroundColor '#999999' }
+_.'bg-secondary-400' { backgroundColor '#666666' }
+// GREEN
+_.'bg-primary-50' { backgroundColor '#eff6ff' }
+_.'bg-primary-100' { backgroundColor '#dbeafe' }
+_.'bg-primary-200' { backgroundColor '#bfdbfe' }
+_.'bg-primary-300' { backgroundColor '#93c5fd' }
+_.'bg-primary-400' { backgroundColor '#60a5fa' }
+_.'bg-primary-500' { backgroundColor '#3b82f6' }
+_.'bg-primary-600' { backgroundColor '#2563eb' }
+_.'bg-primary-700' { backgroundColor '#1d4ed8' }
+_.'bg-primary-800' { backgroundColor '#1e40af' }
+_.'bg-primary-900' { backgroundColor '#1e3a8a' }

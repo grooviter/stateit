@@ -1,0 +1,43 @@
+plugins {
+    id 'groovy'
+    id "com.bertramlabs.asset-pipeline" version "3.4.4"
+}
+
+dependencies {
+    assets "com.bertramlabs.plugins:asset-pipeline-core:$assets_pipeline"
+    assets "com.bertramlabs.plugins:jsx-asset-pipeline:$assets_pipeline"
+    assets "com.bertramlabs.plugins:typescript-asset-pipeline:$assets_pipeline"
+    assets("com.bertramlabs.plugins:groocss-asset-pipeline:$assets_pipeline") {
+        exclude module: 'groocss'
+    }
+
+    //assets('com.github.grooviter:groocss:1.0.0')
+    assets('org.groocss:groocss:1.0-M4-groovy2.5')
+}
+
+assets {
+    minifyJs         = true
+    minifyCss        = false
+    enableSourceMaps = false
+    maxThreads       = Runtime.runtime.availableProcessors() - 1
+
+    configOptions = [
+        commonJs: true,
+        enableES6: false,
+        groocss: [
+            prettyPrint: true,
+            compress: false,
+            noExts: false,
+            convertUnderline: false
+        ]
+    ]
+
+    excludes = [
+        'components/*',
+        'react*.js',
+        'layout/*',
+        'custom/*.css',
+        'origins/*',
+        'fonts/*'
+    ]
+}
