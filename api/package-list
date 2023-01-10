@@ -1,0 +1,8 @@
+com.github.grooviter.stateit
+com.github.grooviter.stateit.core
+com.github.grooviter.stateit.core.variables
+com.github.grooviter.stateit.files
+com.github.grooviter.stateit.files.directory
+com.github.grooviter.stateit.files.state
+com.github.grooviter.stateit.files.targz
+com.github.grooviter.stateit.functions

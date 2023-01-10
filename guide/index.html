@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>StateIT</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>StateIT</h1>
+<div class="details">
+<span id="revnumber">version 1.0.0-SNAPSHOT</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_installation">1. Installation</a></li>
+<li><a href="#_concepts">2. Concepts</a>
+<ul class="sectlevel2">
+<li><a href="#_plan">2.1. Plan</a></li>
+<li><a href="#_resource">2.2. Resource</a></li>
+<li><a href="#_catalog">2.3. Catalog</a></li>
+<li><a href="#_state">2.4. State</a></li>
+<li><a href="#_dependency">2.5. Dependency</a></li>
+</ul>
+</li>
+<li><a href="#_stateit_process">3. StateIT process</a></li>
+<li><a href="#_tutorial">4. Tutorial</a>
+<ul class="sectlevel2">
+<li><a href="#_validate">4.1. validate</a></li>
+<li><a href="#_apply">4.2. apply</a></li>
+<li><a href="#_destroy">4.3. destroy</a></li>
+</ul>
+</li>
+<li><a href="#_variables_secrets">5. Variables &amp; Secrets</a>
+<ul class="sectlevel2">
+<li><a href="#_resolution">5.1. Resolution</a>
+<ul class="sectlevel3">
+<li><a href="#_default">5.1.1. default</a></li>
+<li><a href="#_specific_file">5.1.2. specific file</a></li>
+</ul>
+</li>
+<li><a href="#_variables">5.2. Variables</a></li>
+<li><a href="#_secrets">5.3. Secrets</a></li>
+</ul>
+</li>
+<li><a href="#_functions">6. Functions</a>
+<ul class="sectlevel2">
+<li><a href="#_date">6.1. Date</a>
+<ul class="sectlevel3">
+<li><a href="#_now">6.1.1. now()</a></li>
+<li><a href="#_nowpattern">6.1.2. now(pattern)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_providers">7. Providers</a>
+<ul class="sectlevel2">
+<li><a href="#_files">7.1. Files</a>
+<ul class="sectlevel3">
+<li><a href="#_state_2">7.1.1. State</a></li>
+<li><a href="#_resources">7.1.2. Resources</a>
+<ul class="sectlevel4">
+<li><a href="#_directory">directory</a></li>
+<li><a href="#_targz">targz</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_github">7.2. Github</a>
+<ul class="sectlevel3">
+<li><a href="#_credentials">7.2.1. Credentials</a></li>
+<li><a href="#_state_3">7.2.2. State</a></li>
+<li><a href="#_resources_2">7.2.3. Resources</a>
+<ul class="sectlevel4">
+<li><a href="#_repository">repository</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_create_your_own">7.3. Create your own</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+Stateit is a library created to make it easier execute tasks that require to keep state
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation"><a class="anchor" href="#_installation"></a>1. Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can execute StateIT with a standalone CLI so that you can execute it any time from your terminal.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_concepts"><a class="anchor" href="#_concepts"></a>2. Concepts</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_plan"><a class="anchor" href="#_plan"></a>2.1. Plan</h3>
+<div class="paragraph">
+<p>A plan is a manifest file where you can:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>describe a set of <strong>resources</strong></p>
+</li>
+<li>
+<p>describe how the <strong>state</strong> of these resources will be stored</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In practice a plan is a groovy file with a <strong>.st</strong> suffix:</p>
+</div>
+<div class="listingblock">
+<div class="title">plan.st</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">resource1(<span class="string"><span class="delimiter">'</span><span class="content">id1</span><span class="delimiter">'</span></span>) { ... } <i class="conum" data-value="1"></i><b>(1)</b>
+resource2(<span class="string"><span class="delimiter">'</span><span class="content">id2</span><span class="delimiter">'</span></span>) { ... }
+resource2(<span class="string"><span class="delimiter">'</span><span class="content">id3</span><span class="delimiter">'</span></span>) { ... }
+
+state {
+  provider = fileState(<span class="string"><span class="delimiter">'</span><span class="content">/path/to/state.json</span><span class="delimiter">'</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>resources declared in the plan</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>state storage, or where and how the state of the resources will be stored</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resource"><a class="anchor" href="#_resource"></a>2.2. Resource</h3>
+<div class="paragraph">
+<p>A resource represents something inside a system having state. For instance:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a Github repository (can be created, removed, having permissions&#8230;&#8203;.)</p>
+</li>
+<li>
+<p>a local directory which (could be created or removed)</p>
+</li>
+<li>
+<p>a database (could be created, could have tables&#8230;&#8203;)</p>
+</li>
+<li>
+<p>&#8230;&#8203;you name it</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A resource has at least and <strong>ID</strong> and <strong>some properties</strong> needed to create the resource.</p>
+</div>
+<div class="listingblock">
+<div class="title">resource</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">resource1(<span class="string"><span class="delimiter">'</span><span class="content">id-of-the-resource</span><span class="delimiter">'</span></span>) {  <i class="conum" data-value="1"></i><b>(1)</b>
+    property1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">property value</span><span class="delimiter">&quot;</span></span>    <i class="conum" data-value="2"></i><b>(2)</b>
+    property2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>
+    propertyN = <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>ID</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>properties</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_catalog"><a class="anchor" href="#_catalog"></a>2.3. Catalog</h3>
+<div class="paragraph">
+<p>A catalog is a set of plan files in the same directory sharing the same state provider.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="text">+-catalog-dir
+      +
+      |
+      +-- plan1.st
+      |
+      +-- plan2.st
+      |
+      +-- stateit.state.json
+      |
+      +-- stateit.vars.toml</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If StateIT detects more than one state provider, it will stop trying to execute the catalog,
+and it will show an error.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_state"><a class="anchor" href="#_state"></a>2.4. State</h3>
+<div class="paragraph">
+<p>When StateIT executes a plan it should decide whether:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>to <strong>validate</strong> the resources declared in it</p>
+</li>
+<li>
+<p>to <strong>apply</strong> the resources declared in it</p>
+</li>
+<li>
+<p>to <strong>destroy</strong> all the resources declared in it</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In order to be able to decide, StateIT should store the state of the resources each time it executes the same plan.
+That state is stored as JSON. It stores the list of the resources applied by the plan execution.</p>
+</div>
+<div class="listingblock">
+<div class="title">state.json</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">[
+    {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">resource-id</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="1"></i><b>(1)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">qualified.type.class.of.Resource1</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">props</span><span class="delimiter">&quot;</span></span>: { <i class="conum" data-value="3"></i><b>(3)</b>
+           <span class="key"><span class="delimiter">&quot;</span><span class="content">property1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>,
+           <span class="key"><span class="delimiter">&quot;</span><span class="content">property2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>
+        }
+    }
+]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>ID of the resource</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>qualified class name of the resource</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the properties used to build the state of the resource</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This JSON file can be stored in any type of storage. In order to be able to store the plan execution, the plan
+file should declare which type of state storage is going to use:</p>
+</div>
+<div class="listingblock">
+<div class="title">file state provider</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">state {
+  provider = fileState(<span class="string"><span class="delimiter">'</span><span class="content">/path/to/state.json</span><span class="delimiter">'</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Declares a local file where the stage will be stored</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependency"><a class="anchor" href="#_dependency"></a>2.5. Dependency</h3>
+<div class="paragraph">
+<p>A given resource could depend on another resource. When declaring a resource you can assign the resource
+to a variable and then use the resource output properties in another resource.</p>
+</div>
+<div class="listingblock">
+<div class="title">dependency</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> res1 = resource1(<span class="string"><span class="delimiter">'</span><span class="content">id-resource1</span><span class="delimiter">'</span></span>) { <i class="conum" data-value="1"></i><b>(1)</b>
+   property = <span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>
+}
+
+resource2(<span class="string"><span class="delimiter">'</span><span class="content">id-resource2</span><span class="delimiter">'</span></span>) {
+   property = res1.x <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>assign resource to a variable to be able to use it in another resource</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>resource2 depends on x property from resource1</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stateit_process"><a class="anchor" href="#_stateit_process"></a>3. StateIT process</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>At 1000 feet the StateIT process is pretty simple:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/diag-2c822b2e0289a9950a103e7d66be5ec2.png" alt="Diagram" width="1400" height="294">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Plan file is <strong>parsed</strong></p>
+</li>
+<li>
+<p>Each resource found in plan has its <strong>properties resolved</strong> including their <strong>dependencies</strong> with other resources</p>
+</li>
+<li>
+<p>Once resources are build and populated, all of them are <strong>validated</strong></p>
+</li>
+<li>
+<p>If the process goal was only to validate the plan, the process ends showing the result of the validation</p>
+</li>
+<li>
+<p>Anyway regardless of the goal if the plan is not valid the process ends there</p>
+</li>
+<li>
+<p>If the goal of the process is other than validation resources are applied or destroyed and then the process ends</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tutorial"><a class="anchor" href="#_tutorial"></a>4. Tutorial</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>StateIT executes plans representing resource states. When a plan is executed StateIT stores its state so that it knows
+when a given resource has been applied successfully and there is no need to execute it again.</p>
+</div>
+<div class="sect2">
+<h3 id="_validate"><a class="anchor" href="#_validate"></a>4.1. validate</h3>
+<div class="paragraph">
+<p>The following plan file shows a resource representing a local filesystem directory (/tmp/sample-dir). It also shows that the
+execution state will be stored in a file at /tmp/state.json.</p>
+</div>
+<div class="listingblock">
+<div class="title">plan.st</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">directory(<span class="string"><span class="delimiter">&quot;</span><span class="content">sample-dir</span><span class="delimiter">&quot;</span></span>) {
+  path = <span class="string"><span class="delimiter">&quot;</span><span class="content">/tmp/sample-dir</span><span class="delimiter">&quot;</span></span>
+}
+
+state {
+   provider = fileState(<span class="string"><span class="delimiter">&quot;</span><span class="content">/tmp/state.json</span><span class="delimiter">&quot;</span></span>)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Although we know it&#8217;s properly configured lets</p>
+</div>
+<div class="listingblock">
+<div class="title">validate</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="text">stateit --plan plan.st validate</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which outputs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>[stateit] - 03:12:21.538 - validating resources to apply
+[stateit] - 03:12:21.542 - TO APPLY:     1
+[stateit] - 03:12:21.542 - TO REMOVE:    0
+[stateit] - 03:12:21.546 - VALIDATION SUCCEEDED!</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It seems that the plan is ok and that 1 resource will be applied in case you carry on and execute the plan.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_apply"><a class="anchor" href="#_apply"></a>4.2. apply</h3>
+<div class="paragraph">
+<p>In that case
+execute:</p>
+</div>
+<div class="listingblock">
+<div class="title">execute</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="text">stateit --plan plan.st execute</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What it does is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>checks that a previous state exists</p>
+</li>
+<li>
+<p>shows how many resources will apply or which will destroy</p>
+</li>
+<li>
+<p>show the resources removed/applied</p>
+</li>
+<li>
+<p>saves the state once the execution has finished</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>[stateit] - 03:16:30.272 - state file found... loading resources
+[stateit] - 03:16:30.297 - TO APPLY:     1
+[stateit] - 03:16:30.297 - TO REMOVE:    0
+[stateit] - 03:16:30.297 - create sample-dir
+[stateit] - 03:16:30.301 - saving state</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can check that the task created a directory. Now if you execute the same script one more time, you&#8217;ll realize that the script doesn&#8217;t execute anything:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>[stateit] - 03:16:56.022 - state file found... loading resources
+[stateit] - 03:16:56.050 - TO APPLY:     0
+[stateit] - 03:16:56.050 - TO REMOVE:    0
+[stateit] - 03:16:56.051 - saving state</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s because the state stored in the <code>/tmp/state.json</code> path has registered the state of the script,
+and it knows that the resource have been already applied.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_destroy"><a class="anchor" href="#_destroy"></a>4.3. destroy</h3>
+<div class="paragraph">
+<p>Finally if we&#8217;d like to remove all applied resources we can execute the <strong>destroy</strong> command:</p>
+</div>
+<div class="listingblock">
+<div class="title">destroy</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="text">stateit --plan plan.st destroy</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will destroy all resources declared in the plan:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>[stateit] - 03:26:09.109 - state file found... loading resources
+[stateit] - 03:26:09.135 - destroying all resources apply
+[stateit] - 03:26:09.135 - deleting ALL (1) resources
+[stateit] - 03:26:09.136 - destroy sample-dir
+[stateit] - 03:26:09.137 - saving state</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_variables_secrets"><a class="anchor" href="#_variables_secrets"></a>5. Variables &amp; Secrets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>At some point you may parametrize your plans with variables instead of hardcoding those values. StateIT by default
+uses TOML files. Inside these files the convention is that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>NON SENSITIVE</strong> values should be placed under the <strong>vars</strong> group.</p>
+</li>
+<li>
+<p><strong>SENSITIVE</strong> values should be placed under <strong>secrets</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">stateit.vars.toml</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="toml">[vars]
+...
+
+[secrets]
+...</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resolution"><a class="anchor" href="#_resolution"></a>5.1. Resolution</h3>
+<div class="sect3">
+<h4 id="_default"><a class="anchor" href="#_default"></a>5.1.1. default</h4>
+<div class="paragraph">
+<p>By default StateIT looks for a TOML variable file named <strong>stateit.vars.toml</strong> in these locations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>At the StateIT directory at $HOME ($HOME/.stateit)</p>
+</li>
+<li>
+<p>In the same directory as the executed plan file</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_specific_file"><a class="anchor" href="#_specific_file"></a>5.1.2. specific file</h4>
+<div class="paragraph">
+<p>You can always pass a variables file as an argument using <strong>--var-file</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title">specific file</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="shell">stateit --plan /path/to/plan/plan.st --var-file /path/to/var/file/stateit.vars.toml</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_variables"><a class="anchor" href="#_variables"></a>5.2. Variables</h3>
+<div class="paragraph">
+<p>To reference a variable in the plan file you can use the <strong>var_</strong> variable followed by the name of the
+variable you&#8217;d like to resolve:</p>
+</div>
+<div class="listingblock">
+<div class="title">variables example</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">repository(<span class="string"><span class="delimiter">&quot;</span><span class="content">sample-dir</span><span class="delimiter">&quot;</span></span>) {
+    path  = var_.sample_dir_path
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The variable should be present in the <strong>vars</strong> section of the <strong>stateit.vars.toml</strong> file:</p>
+</div>
+<div class="listingblock">
+<div class="title">stateit.vars.toml</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="toml">[vars]
+sample_dir_path=&quot;/tmp/example_dir&quot;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_secrets"><a class="anchor" href="#_secrets"></a>5.3. Secrets</h3>
+<div class="paragraph">
+<p>Some variables like passwords, and credentials in general require to have a special consideration.
+These values won&#8217;t be shown in console output. This time to reference a secret in your plan you can
+use the <strong>sec_</strong> variable followed by the name of the secret:</p>
+</div>
+<div class="listingblock">
+<div class="title">github example</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">github_repository(<span class="string"><span class="delimiter">&quot;</span><span class="content">sample-dir</span><span class="delimiter">&quot;</span></span>) {
+    username  = sec_.github_username
+    password  = sec_.github_token
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The secret should be declared in the <strong>stateit.vars.toml</strong> file in the <strong>secrets</strong> section:</p>
+</div>
+<div class="listingblock">
+<div class="title">stateit.vars.toml</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="toml">[secrets]
+github_username=username
+github_token=token</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Secrets are not stored in the resource state
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_functions"><a class="anchor" href="#_functions"></a>6. Functions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Although StateIT tries to be very concise, however there are a set of utility functions available in every plan that will help
+to reduce even more the code of the plan.</p>
+</div>
+<div class="sect2">
+<h3 id="_date"><a class="anchor" href="#_date"></a>6.1. Date</h3>
+<div class="paragraph">
+<p>Date functions help to create dates for different tasks (e.g. generate a file name with the current date):</p>
+</div>
+<div class="sect3">
+<h4 id="_now"><a class="anchor" href="#_now"></a>6.1.1. now()</h4>
+<div class="paragraph">
+<p>This function converts a given date to a string using the ISO-8601 ("yyyy-MM-dd&#8217;T&#8217;HH:mm:ssZ")</p>
+</div>
+<div class="listingblock">
+<div class="title">now(pattern)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">directory(<span class="string"><span class="delimiter">'</span><span class="content">todays-backup</span><span class="delimiter">'</span></span>) {
+  path  = <span class="string"><span class="delimiter">&quot;</span><span class="content">/backups/</span><span class="inline"><span class="inline-delimiter">${</span>now()<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span> <i class="conum" data-value="1"></i><b>(1)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>path will become <strong>/backups/2022-12-31&#8217;T'10:00:00Z</strong></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nowpattern"><a class="anchor" href="#_nowpattern"></a>6.1.2. now(pattern)</h4>
+<div class="paragraph">
+<p>This function converts a given date to a string following the pattern passed as an argument.</p>
+</div>
+<div class="listingblock">
+<div class="title">now(pattern)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">directory(<span class="string"><span class="delimiter">'</span><span class="content">todays-backup</span><span class="delimiter">'</span></span>) {
+  path  = <span class="string"><span class="delimiter">&quot;</span><span class="content">/backups/</span><span class="inline"><span class="inline-delimiter">${</span>now(<span class="string"><span class="delimiter">'</span><span class="content">yyyy-MM-dd</span><span class="delimiter">'</span></span>)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span> <i class="conum" data-value="1"></i><b>(1)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>path will become <strong>/backups/2022-12-31</strong></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_providers"><a class="anchor" href="#_providers"></a>7. Providers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A provider represents a set of stateful resources and some stateful operations of a specific realm.</p>
+</div>
+<div class="sect2">
+<h3 id="_files"><a class="anchor" href="#_files"></a>7.1. Files</h3>
+<div class="paragraph">
+<p>The <strong>Files</strong> provider has a set of resources representing local filesystem items and stateful operations.</p>
+</div>
+<div class="sect3">
+<h4 id="_state_2"><a class="anchor" href="#_state_2"></a>7.1.1. State</h4>
+<div class="paragraph">
+<p>The <strong>Files</strong> provider provides a way of handling a plan state via a local file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">state {
+    implementation = file(<span class="string"><span class="delimiter">'</span><span class="content">/tmp/mystate.json</span><span class="delimiter">'</span></span>)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_resources"><a class="anchor" href="#_resources"></a>7.1.2. Resources</h4>
+<div class="sect4">
+<h5 id="_directory"><a class="anchor" href="#_directory"></a>directory</h5>
+<div class="paragraph">
+<p>Represents a file system directory</p>
+</div>
+<div class="listingblock">
+<div class="title">directory</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">directory(<span class="string"><span class="delimiter">'</span><span class="content">id-directory</span><span class="delimiter">'</span></span>) {
+  path = <span class="string"><span class="delimiter">'</span><span class="content">/tmp/directory-to-create</span><span class="delimiter">'</span></span>
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. arguments</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path to create the directory at</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. attributes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path to create the directory at</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_targz"><a class="anchor" href="#_targz"></a>targz</h5>
+<div class="paragraph">
+<p>Represents a periodic tar.gz operation. It uses a cron expression to schedule the operation. It could be a compress or uncompress operation.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Cron scheduling only works in *nix systems with crontab, otherwise it will only execute once
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">targz</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">targz(<span class="string"><span class="delimiter">'</span><span class="content">id-directory</span><span class="delimiter">'</span></span>) {
+  input     = <span class="string"><span class="delimiter">&quot;</span><span class="content">/input/dir</span><span class="delimiter">&quot;</span></span>
+  output    = () -&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">/anotherdir/output</span><span class="inline"><span class="inline-delimiter">${</span>now(<span class="string"><span class="delimiter">'</span><span class="content">yyyy-MM-dd</span><span class="delimiter">'</span></span>)<span class="inline-delimiter">}</span></span><span class="content">.tar.gz</span><span class="delimiter">&quot;</span></span>
+  cron      = <span class="string"><span class="delimiter">&quot;</span><span class="content">*/5 * * * *</span><span class="delimiter">&quot;</span></span>
+  action    = compress()
+  overwrite = <span class="predefined-constant">true</span>
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. arguments</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">input</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">directory to compress/uncompress</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">output (string)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tar.gz file to create (static)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">output (lambda expr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tar.gz file to create (dynamic)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cron</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cron expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">* * * * *</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">action</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">compress() / uncompress()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">compress()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">overwrite</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">whether to overwrite the file in case it has the same name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_github"><a class="anchor" href="#_github"></a>7.2. Github</h3>
+<div class="paragraph">
+<p>Provides resources that can be created in Github such as repository, security restrictions, branches&#8230;&#8203;etc.</p>
+</div>
+<div class="sect3">
+<h4 id="_credentials"><a class="anchor" href="#_credentials"></a>7.2.1. Credentials</h4>
+<div class="listingblock">
+<div class="title">credentials using environment variables</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">export STATEIT_GITHUB_USERNAME=&quot;username&quot;
+export STATEIT_GITHUB_TOKEN=&quot;token&quot;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_state_3"><a class="anchor" href="#_state_3"></a>7.2.2. State</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">state {
+  implementation = github {
+     repository = <span class="string"><span class="delimiter">&quot;</span><span class="content">myorg/myrepository</span><span class="delimiter">&quot;</span></span>
+     file       = <span class="string"><span class="delimiter">&quot;</span><span class="content">mystate.json</span><span class="delimiter">&quot;</span></span>
+     branch     = <span class="string"><span class="delimiter">&quot;</span><span class="content">main</span><span class="delimiter">&quot;</span></span>
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_resources_2"><a class="anchor" href="#_resources_2"></a>7.2.3. Resources</h4>
+<div class="sect4">
+<h5 id="_repository"><a class="anchor" href="#_repository"></a>repository</h5>
+<div class="listingblock">
+<div class="title">repository</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">github_repository(<span class="string"><span class="delimiter">'</span><span class="content">id-directory</span><span class="delimiter">'</span></span>) {
+  name  = <span class="string"><span class="delimiter">&quot;</span><span class="content">mycustomrepository</span><span class="delimiter">&quot;</span></span>
+  owner = <span class="string"><span class="delimiter">&quot;</span><span class="content">myorganization</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_your_own"><a class="anchor" href="#_create_your_own"></a>7.3. Create your own</h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 1.0.0-SNAPSHOT<br>
+Last updated 2022-12-31 03:23:52 +0100
+</div>
+</div>
+<link rel="stylesheet" href="./coderay-asciidoctor.css">
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains('stemblock')) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>
