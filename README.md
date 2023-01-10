@@ -1,4 +1,4 @@
-![](./gradle/stateit-screenshot.png)
+![](./gradle/stateit-header.png)
 
 # StateIT
 
