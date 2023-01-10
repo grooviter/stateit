@@ -165,6 +165,20 @@ subprojects {
   })
 }
 
+task generateSite {
+  dependsOn("clean", ":stateit-core:groovydoc", ":guide:asciidoctor", ":website:assetClean", ":website:assetCompile")
+  doLast {
+    copy {
+      from "$rootDir/docs/guide/build/docs/asciidoc"
+      into "$rootDir/docs/website/build/assets/guide"
+    }
+    copy {
+      from "$rootDir/modules/stateit-core/build/docs/groovydoc"
+      into "$rootDir/docs/website/build/assets/api"
+    }
+  }
+}
+
 task release() {
   dependsOn(version.endsWith('SNAPSHOT')
     ? [':gql-core:publishAllPublicationsToSnapshotsRepository', ':gql-ratpack:publishAllPublicationsToSnapshotsRepository', 'jreleaserRelease']
