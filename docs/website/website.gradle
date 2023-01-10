@@ -7,8 +7,6 @@ plugins {
 dependencies {
     assets('com.github.grooviter:groocss:1.0.0-SNAPSHOT')
     assets "com.bertramlabs.plugins:asset-pipeline-core:$assets_pipeline"
-    assets "com.bertramlabs.plugins:jsx-asset-pipeline:$assets_pipeline"
-    assets "com.bertramlabs.plugins:typescript-asset-pipeline:$assets_pipeline"
     assets("com.bertramlabs.plugins:groocss-asset-pipeline:$assets_pipeline") {
         exclude module: 'groocss'
     }
@@ -26,7 +24,7 @@ assets {
         groocss: [prettyPrint: true, compress: false, noExts: false, convertUnderline: false]
     ]
 
-    excludes = ['origins/*', 'fonts/*']
+    excludes = ['origins/*', '**/jquery/**']
 }
 
 gitPublish {
