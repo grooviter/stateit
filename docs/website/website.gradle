@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    assets('org.groocss:groocss:1.0-M4-groovy2.5')
+    assets('com.github.grooviter:groocss:1.0.0-SNAPSHOT')
     assets "com.bertramlabs.plugins:asset-pipeline-core:$assets_pipeline"
     assets "com.bertramlabs.plugins:jsx-asset-pipeline:$assets_pipeline"
     assets "com.bertramlabs.plugins:typescript-asset-pipeline:$assets_pipeline"
@@ -41,8 +41,7 @@ gitPublish {
 }
 
 gitPublishPush {
-    dependsOn 'setAuthentication'
-    dependsOn 'generateSite'
+    dependsOn('setAuthentication','generateSite')
 }
 
 task generateSite {
@@ -59,7 +58,7 @@ task generateSite {
     }
 }
 
-task setAuthentication(dependsOn: 'generateSite') {
+task setAuthentication {
     doLast {
         System.setProperty('org.ajoberstar.grgit.auth.username', findProperty('PUBLISH_GH_TOKEN'))
     }
