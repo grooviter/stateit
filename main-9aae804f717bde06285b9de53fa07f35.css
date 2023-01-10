@@ -67,22 +67,22 @@
 @font-face { font-family: Roboto; font-style: normal; font-weight: 400; src: url(fonts/KFOmCnqEu92Fr1Mu7GxKOzY.woff2) format('woff2'); unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: Roboto; font-style: normal; font-weight: 400; src: url(fonts/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
-.header:hover {
+.header > .menu > ul > li > a:hover {
     color: #fff;
 }
-.header i {
+.header > .menu > ul > li > a i {
     margin-right: 0.2em;
 }
-.header > a {
+.header > .menu > ul > li > a {
     text-decoration: none;
     color: #999;
 }
-.header > li {
+.header > .menu > ul > li {
     margin-left: 14px;
     display: flex;
     align-items: center;
 }
-.header > ul {
+.header > .menu > ul {
     list-style-type: none;
     display: flex;
     flex-direction: row;
@@ -100,7 +100,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
 }
 .content-wrapper {
     display: flex;
@@ -109,10 +108,10 @@
     background: url(joel-filipe-VuwAfoHpxgs-unsplash.jpg) no-repeat center center fixed;
     width: 100%;
 }
-.hero-wrapper > h1 {
+.hero-wrapper > .hero > h1 {
     width: 11em;
 }
-.hero-wrapper > p {
+.hero-wrapper > .hero > p {
     width: 20em;
 }
 .hero-wrapper > .hero {
@@ -153,7 +152,9 @@
     min-height: 16vh;
 }
 @media only screen and (max-width: 1268px) {
-
+.header > .menu {
+    width: 100%;
+}
 
 }
 @media only screen and (max-width: 1268px) {
