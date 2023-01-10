@@ -77,50 +77,30 @@ class RepositoryDSLSpec extends Specification {
     void 'create a repository succeeds'() {
         given:
         Plan plan = plan {
-            def org = github_organization("@shine"){
-                name = "shine";
+            def org = github_organization("@my-devops-playground") {
+                name = "my-devops-playground";
                 type = "open-source"
             }
 
-            def admins = github_team("@shine/admins") {
-                organization = org.name
-                name         = "admins"
-                role         = "admins"
-            }
-
-            def maintainers = github_team("@shine/maintainers") {
-                organization = org.name
-                name         = "maintainers"
-                role         = "maintainers"
-            }
-
-            def repo = github_repository("@shine/hope") {
+            def repo = github_repository("@my-devops-playground/hope") {
                 owner          = org.name
                 name           = "hope"
                 is_private     = true
                 default_branch = "main"
-                from_template  = "olvido/gara"
-                collaborators  = [
-                    ADMIN: ["owner"],
-                    MAINTAINER: ["owner", "collaborator"]
-                ]
-            }
-
-            github_branch_protection("@shine/hope/main") {
-                branch             = "main"
-                repository         = repo.full_name
-                codeowners_enable  = true
-                codeowners_content = """
-                .github/workflows @shine/admins
-                package.json @shine/leaders
-                """
+                from_template  = "my-devops-playground/stateit-template"
             }
         }
 
-        expect:
-        apply plan isSuccess()
+        when:
+        Result<Plan> result = apply plan
+
+        then:
+        result.success
+
+        and:
+        result.context.resourcesApplied.size() == 2
 
         cleanup:
-        destroy plan
+        result.sideEffect { destroy(it) }
     }
 }

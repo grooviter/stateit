@@ -86,7 +86,7 @@ class PlanExecutor {
             log.info "destroy ${resource.id}"
             Result<Resource> result = resource.applyWhenDestroying()
             if (result.isFailure()) {
-                return Result.error(resolvePlan(stage, [], removed), result.error)
+                return Result.error(resolvePlan(stage, stage.resourcesApplied, removed), result.error)
             } else {
                 removed.add(resource)
             }
