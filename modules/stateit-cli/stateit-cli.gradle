@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
     id 'application'
+    id "com.bmuschko.docker-java-application" version "9.1.0"
 }
 
 configurations {
@@ -26,4 +27,12 @@ application {
 
 groovydoc {
     groovyClasspath = classpath + configurations.groovydocs
+}
+
+docker {
+    javaApplication {
+        baseImage = 'openjdk:17-ea-slim-buster'
+        maintainer = 'Mario Garcia'
+        jvmArgs = ['-Xms256m', '-Xmx1024m']
+    }
 }
