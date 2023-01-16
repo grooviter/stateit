@@ -2,7 +2,11 @@ package com.github.grooviter.stateit.github.repository
 
 import com.github.grooviter.stateit.core.Plan
 import com.github.grooviter.stateit.core.Result
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.core.Options
+import com.github.tomakehurst.wiremock.junit.WireMockRule
 import spock.lang.IgnoreIf
+import spock.lang.Shared
 import spock.lang.Specification
 
 import static com.github.grooviter.stateit.DSL.plan
@@ -12,6 +16,21 @@ import static com.github.grooviter.stateit.DSL.destroy
 import static com.github.grooviter.stateit.github.common.CredentialsResolver.resolveCredentials
 
 class RepositoryDSLSpec extends Specification {
+
+    @Shared
+    WireMockServer wireMockServer
+
+    void setup() {
+        wireMockServer = new WireMockServer(8888)
+        //wireMockServer.startRecording("https://api.github.com")
+        wireMockServer.start()
+    }
+
+    void cleanup() {
+        wireMockServer.stop()
+        //wireMockServer.stopRecording()
+    }
+
     void 'validating a repository fails when missing its name'() {
         when:
         Result<Plan> result = validate plan {

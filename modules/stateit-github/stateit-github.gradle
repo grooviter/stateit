@@ -16,6 +16,7 @@ dependencies {
 
     groovydocs "org.apache.groovy:groovy-all:$groovy"
     testImplementation project(":stateit-testing")
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.35.0"
 }
 
 groovydoc {
